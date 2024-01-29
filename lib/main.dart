@@ -36,6 +36,7 @@ class FinancrrAppState extends State<FinancrrApp> {
     // _activeLightTheme = widget.themePreferences.currentLightTheme;
     // _activeDarkTheme = widget.themePreferences.currentDarkTheme;
     // _themeMode = widget.themePreferences.themeMode;
+    _themeMode = ThemeMode.light;
   }
 
   @override

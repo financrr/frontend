@@ -13,17 +13,17 @@ class ZoomTapAnimation extends StatefulWidget {
 
   const ZoomTapAnimation(
       {Key? key,
-        required this.child,
-        this.onTap,
-        this.begin = 1.0,
-        this.end = 0.93,
-        this.beginDuration = const Duration(milliseconds: 20),
-        this.endDuration = const Duration(milliseconds: 120),
-        this.longTapRepeatDuration = const Duration(milliseconds: 100),
-        this.beginCurve = Curves.decelerate,
-        this.endCurve = Curves.fastOutSlowIn,
-        this.onLongTap,
-        this.enableLongTapRepeatEvent = false})
+      required this.child,
+      this.onTap,
+      this.begin = 1.0,
+      this.end = 0.93,
+      this.beginDuration = const Duration(milliseconds: 20),
+      this.endDuration = const Duration(milliseconds: 120),
+      this.longTapRepeatDuration = const Duration(milliseconds: 100),
+      this.beginCurve = Curves.decelerate,
+      this.endCurve = Curves.fastOutSlowIn,
+      this.onLongTap,
+      this.enableLongTapRepeatEvent = false})
       : super(key: key);
 
   @override

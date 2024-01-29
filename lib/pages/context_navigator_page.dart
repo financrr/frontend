@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:financrr_frontend/data/theme_repository.dart';
 import 'package:financrr_frontend/pages/auth/login_page.dart';
 import 'package:financrr_frontend/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../layout/adaptive_scaffold.dart';
 import '../main.dart';

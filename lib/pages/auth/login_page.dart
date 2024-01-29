@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:financrr_frontend/main.dart';
 import 'package:financrr_frontend/themes.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:financrr_frontend/util/text_utils.dart';
@@ -112,8 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.only(right: 5),
                 child: Icon(Icons.settings, size: 15, color: _financrrTheme.primaryAccentColor),
               ),
-              _textStyles.bodyMedium
-                  .text('financrr.jasonlessenich.dev', color: _financrrTheme.primaryAccentColor, fontWeightOverride: FontWeight.w700),
+              _textStyles.bodyMedium.text('financrr.jasonlessenich.dev',
+                  color: _financrrTheme.primaryAccentColor, fontWeightOverride: FontWeight.w700),
             ],
           ),
         ),
@@ -130,7 +129,8 @@ class _LoginPageState extends State<LoginPage> {
         Expanded(child: Divider(thickness: 3, color: _financrrTheme.secondaryBackgroundColor)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: _textStyles.bodyMedium.text(_locale.signInMethodDivider, color: _financrrTheme.secondaryBackgroundColor, fontWeightOverride: FontWeight.w800),
+          child: _textStyles.bodyMedium.text(_locale.signInMethodDivider,
+              color: _financrrTheme.secondaryBackgroundColor, fontWeightOverride: FontWeight.w800),
         ),
         Expanded(child: Divider(thickness: 3, color: _financrrTheme.secondaryBackgroundColor))
       ],
@@ -140,14 +140,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildThirdPartySignInMethod() {
     return ZoomTapAnimation(
         child: Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: _financrrTheme.secondaryBackgroundColor,
-            borderRadius: BorderRadius.circular(15),
-          ),
-        )
-    );
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: _financrrTheme.secondaryBackgroundColor,
+        borderRadius: BorderRadius.circular(15),
+      ),
+    ));
   }
 
   String _getRandomSignInMessage() {

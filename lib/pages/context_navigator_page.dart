@@ -36,9 +36,9 @@ class ContextNavigatorPageState extends State<ContextNavigatorPage> {
 
   Future _navigate() async {
     // TODO: impl navigation
-    FinancrrApp.of(context).changeAppTheme(theme: AppThemes.light());
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
+    FinancrrApp.of(context).changeAppTheme(theme: AppThemes.light());
     context.goPath(LoginPage.pagePath.build());
   }
 

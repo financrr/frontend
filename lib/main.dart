@@ -50,8 +50,7 @@ class FinancrrAppState extends State<FinancrrApp> {
           supportedLocales: AppLocalizations.supportedLocales,
           theme: _activeLightTheme.themeData,
           darkTheme: _activeDarkTheme.themeData,
-          themeMode: _themeMode
-      ),
+          themeMode: _themeMode),
     );
   }
 

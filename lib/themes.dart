@@ -9,11 +9,7 @@ class AppTheme {
   final ThemeData themeData;
 
   const AppTheme(
-      {required this.id,
-        required this.name,
-        required this.previewColor,
-        required this.themeMode,
-        required this.themeData});
+      {required this.id, required this.name, required this.previewColor, required this.themeMode, required this.themeData});
 }
 
 class AppThemes {
@@ -23,90 +19,101 @@ class AppThemes {
   const AppThemes._();
 
   static AppTheme light() {
-    final TextStyle defaultLightStyle = _defaultStyle.copyWith(color: Colors.black);
+    const FinancrrTheme financrrTheme = FinancrrTheme(
+        logoPath: 'assets/logo/logo_blue.svg',
+        primaryAccentColor: Color(0xFF2C03E6),
+        primaryTextColor: Color(0xFF000000),
+        secondaryTextColor: Color(0xFF1C1B1F),
+        primaryBackgroundColor: Color(0xFFFFFFFF),
+        secondaryBackgroundColor: Color(0xFFEBEBEB));
     return AppTheme(
         id: 1,
-        name: (_) => 'Hell',
+        name: (_) => 'Light',
         previewColor: Colors.white,
         themeMode: ThemeMode.light,
-        themeData: ThemeData(
-            extensions: const [
-              FinancrrTheme(logoPath: 'assets/images/logo/banner_dark.svg')
-            ],
-            scaffoldBackgroundColor: Colors.white,
-            brightness: Brightness.light,
-            colorScheme: ThemeData()
-                .colorScheme
-                .copyWith(primary: const Color(0xFF266EF1), secondary: const Color(0xFF0235D2), brightness: Brightness.light),
-            textTheme: ThemeData().textTheme.copyWith(
-              displayLarge: defaultLightStyle.copyWith(fontSize: 57, fontWeight: FontWeight.w400),
-              displayMedium: defaultLightStyle.copyWith(fontSize: 45, fontWeight: FontWeight.w400),
-              displaySmall: defaultLightStyle.copyWith(fontSize: 36, fontWeight: FontWeight.w400),
-              headlineLarge: defaultLightStyle.copyWith(fontSize: 32, fontWeight: FontWeight.w400),
-              headlineMedium: defaultLightStyle.copyWith(fontSize: 28, fontWeight: FontWeight.w400),
-              headlineSmall: defaultLightStyle.copyWith(fontSize: 24, fontWeight: FontWeight.w400),
-              titleLarge: defaultLightStyle.copyWith(fontSize: 22, fontWeight: FontWeight.w500),
-              titleMedium: defaultLightStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
-              titleSmall: defaultLightStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
-              bodyLarge: defaultLightStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
-              bodyMedium: defaultLightStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
-              bodySmall: defaultLightStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
-              labelLarge: defaultLightStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
-              labelMedium: defaultLightStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w500),
-              labelSmall: defaultLightStyle.copyWith(fontSize: 11, fontWeight: FontWeight.w500),
-            ),
-            drawerTheme: ThemeData().drawerTheme.copyWith(backgroundColor: Colors.white)));
+        themeData: _buildThemeData(financrrTheme, Brightness.light));
   }
 
+  // TODO: implement actual dark theme colors
   static AppTheme dark() {
-    final TextStyle defaultDarkStyle = _defaultStyle.copyWith(color: Colors.white);
+    const FinancrrTheme financrrTheme = FinancrrTheme(
+        logoPath: 'assets/logo/logo_light.svg',
+        primaryAccentColor: Color(0xFF407BF8),
+        primaryTextColor: Color(0xFFFFFFFF),
+        secondaryTextColor: Color(0xFFBFBFBF),
+        primaryBackgroundColor: Color(0xFF2B2D31),
+        secondaryBackgroundColor: Color(0xFF1F2124));
     return AppTheme(
         id: 2,
         name: (_) => 'Dunkel',
         previewColor: const Color(0xFF2B2D31),
         themeMode: ThemeMode.dark,
-        themeData: ThemeData(
-            extensions: const [
-              FinancrrTheme(logoPath: 'assets/images/logo/banner_light.svg')
-            ],
-            scaffoldBackgroundColor: const Color(0xFF2B2D31),
-            brightness: Brightness.dark,
-            colorScheme: ThemeData().colorScheme.copyWith(
-              primary: const Color(0xFF407BF8),
-              secondary: const Color(0xFF2267E7),
-              brightness: Brightness.dark,
+        themeData: _buildThemeData(financrrTheme, Brightness.dark));
+  }
+
+  static ThemeData _buildThemeData(FinancrrTheme financrrTheme, Brightness brightness) {
+    final TextStyle defaultStyle = _defaultStyle.copyWith(color: financrrTheme.primaryTextColor);
+    return ThemeData(
+        extensions: [financrrTheme],
+        scaffoldBackgroundColor: financrrTheme.primaryBackgroundColor,
+        brightness: brightness,
+        colorScheme: ThemeData().colorScheme.copyWith(
+            primary: financrrTheme.primaryAccentColor, secondary: financrrTheme.primaryAccentColor, brightness: brightness),
+        textTheme: ThemeData().textTheme.copyWith(
+              displayLarge: defaultStyle.copyWith(fontSize: 57, fontWeight: FontWeight.w400),
+              displayMedium: defaultStyle.copyWith(fontSize: 45, fontWeight: FontWeight.w400),
+              displaySmall: defaultStyle.copyWith(fontSize: 36, fontWeight: FontWeight.w400),
+              headlineLarge: defaultStyle.copyWith(fontSize: 32, fontWeight: FontWeight.w400),
+              headlineMedium: defaultStyle.copyWith(fontSize: 28, fontWeight: FontWeight.w400),
+              headlineSmall: defaultStyle.copyWith(fontSize: 24, fontWeight: FontWeight.w400),
+              titleLarge: defaultStyle.copyWith(fontSize: 22, fontWeight: FontWeight.w500),
+              titleMedium: defaultStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+              titleSmall: defaultStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+              bodyLarge: defaultStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
+              bodyMedium: defaultStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+              bodySmall: defaultStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
+              labelLarge: defaultStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+              labelMedium: defaultStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w500),
+              labelSmall: defaultStyle.copyWith(fontSize: 11, fontWeight: FontWeight.w500),
             ),
-            textTheme: ThemeData().textTheme.copyWith(
-              displayLarge: defaultDarkStyle.copyWith(fontSize: 57, fontWeight: FontWeight.w400),
-              displayMedium: defaultDarkStyle.copyWith(fontSize: 45, fontWeight: FontWeight.w400),
-              displaySmall: defaultDarkStyle.copyWith(fontSize: 36, fontWeight: FontWeight.w400),
-              headlineLarge: defaultDarkStyle.copyWith(fontSize: 32, fontWeight: FontWeight.w400),
-              headlineMedium: defaultDarkStyle.copyWith(fontSize: 28, fontWeight: FontWeight.w400),
-              headlineSmall: defaultDarkStyle.copyWith(fontSize: 24, fontWeight: FontWeight.w400),
-              titleLarge: defaultDarkStyle.copyWith(fontSize: 22, fontWeight: FontWeight.w500),
-              titleMedium: defaultDarkStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
-              titleSmall: defaultDarkStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
-              bodyLarge: defaultDarkStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
-              bodyMedium: defaultDarkStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
-              bodySmall: defaultDarkStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
-              labelLarge: defaultDarkStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
-              labelMedium: defaultDarkStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w500),
-              labelSmall: defaultDarkStyle.copyWith(fontSize: 11, fontWeight: FontWeight.w500),
-            ),
-            drawerTheme: ThemeData().drawerTheme.copyWith(backgroundColor: const Color(0xFF2B2D31))));
+        drawerTheme: ThemeData().drawerTheme.copyWith(backgroundColor: financrrTheme.primaryBackgroundColor));
   }
 }
 
 @immutable
 class FinancrrTheme extends ThemeExtension<FinancrrTheme> {
-  /// The path for this themes' logo.
+  /// The path for this themes' logo (variation).
   final String? logoPath;
 
-  const FinancrrTheme({required this.logoPath});
+  final Color primaryAccentColor;
+  final Color primaryTextColor;
+  final Color secondaryTextColor;
+  final Color primaryBackgroundColor;
+  final Color secondaryBackgroundColor;
+
+  const FinancrrTheme(
+      {required this.logoPath,
+      required this.primaryAccentColor,
+      required this.primaryTextColor,
+      required this.secondaryTextColor,
+      required this.primaryBackgroundColor,
+      required this.secondaryBackgroundColor});
 
   @override
-  ThemeExtension<FinancrrTheme> copyWith({String? logoPath}) {
-    return FinancrrTheme(logoPath: logoPath ?? this.logoPath);
+  ThemeExtension<FinancrrTheme> copyWith(
+      {String? logoPath,
+      Color? primaryAccentColor,
+      Color? primaryTextColor,
+      Color? secondaryTextColor,
+      Color? primaryBackgroundColor,
+      Color? secondaryBackgroundColor}) {
+    return FinancrrTheme(
+        logoPath: logoPath ?? this.logoPath,
+        primaryAccentColor: primaryAccentColor ?? this.primaryAccentColor,
+        primaryTextColor: primaryTextColor ?? this.primaryTextColor,
+        secondaryTextColor: secondaryTextColor ?? this.secondaryTextColor,
+        primaryBackgroundColor: primaryBackgroundColor ?? this.primaryBackgroundColor,
+        secondaryBackgroundColor: secondaryBackgroundColor ?? this.secondaryBackgroundColor);
   }
 
   @override
@@ -114,6 +121,12 @@ class FinancrrTheme extends ThemeExtension<FinancrrTheme> {
     if (other is! FinancrrTheme) {
       return this;
     }
-    return FinancrrTheme(logoPath: logoPath);
+    return FinancrrTheme(
+        logoPath: logoPath,
+        primaryAccentColor: Color.lerp(primaryAccentColor, other.primaryAccentColor, t)!,
+        primaryTextColor: Color.lerp(primaryTextColor, other.primaryTextColor, t)!,
+        secondaryTextColor: Color.lerp(secondaryTextColor, other.secondaryTextColor, t)!,
+        primaryBackgroundColor: Color.lerp(primaryBackgroundColor, other.primaryBackgroundColor, t)!,
+        secondaryBackgroundColor: Color.lerp(secondaryBackgroundColor, other.secondaryBackgroundColor, t)!);
   }
 }

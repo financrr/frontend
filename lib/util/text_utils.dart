@@ -6,13 +6,12 @@ class TextUtils {
   const TextUtils._();
 
   static Widget paddedTitle(BuildContext context, {required String title, bool bottomPadding = true, bool topPadding = true}) {
-    // final FinancrrTheme theme = context.financrrTheme;
-    // TODO: color: theme.textAltColor
+    final FinancrrTheme theme = context.financrrTheme;
     return Padding(
         padding: EdgeInsets.only(bottom: bottomPadding ? 10 : 0, top: topPadding ? 20 : 0),
         child: AppTextStyles.of(context)
             .titleSmall
-            .text(title.toUpperCase(), fontWeightOverride: FontWeight.bold));
+            .text(title.toUpperCase(), color: theme.secondaryTextColor, fontWeightOverride: FontWeight.bold));
   }
 }
 
@@ -78,12 +77,12 @@ class AppTextStyle {
 
   Widget text(String text,
       {Color? color,
-        TextAlign? textAlign,
-        TextOverflow? overflow,
-        FontStyle? fontStyle,
-        FontWeight? fontWeightOverride,
-        double? fontSizeOverride,
-        double? height}) {
+      TextAlign? textAlign,
+      TextOverflow? overflow,
+      FontStyle? fontStyle,
+      FontWeight? fontWeightOverride,
+      double? fontSizeOverride,
+      double? height}) {
     return Text(
       text,
       textAlign: textAlign ?? TextAlign.left,
@@ -99,11 +98,11 @@ class AppTextStyle {
 
   Widget editableText(TextEditingController controller, FocusNode focusNode,
       {Color? color,
-        TextAlign? textAlign,
-        FontStyle? fontStyle,
-        FontWeight? fontWeightOverride,
-        double? fontSizeOverride,
-        double? height}) {
+      TextAlign? textAlign,
+      FontStyle? fontStyle,
+      FontWeight? fontWeightOverride,
+      double? fontSizeOverride,
+      double? height}) {
     return EditableText(
       controller: controller,
       focusNode: focusNode,

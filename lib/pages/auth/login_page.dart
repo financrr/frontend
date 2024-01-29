@@ -28,13 +28,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildPageVertical(Size size) {
     return SingleChildScrollView(
-        child: Center(
-            child: Column(
-                children: [
-                  textStyles.bodyLarge.text('TODO: Implement Login Page')
-                ]
-            )
-        )
-    );
+        child: Center(child: Column(children: [textStyles.bodyLarge.text('TODO: Implement Login Page')])));
   }
 }

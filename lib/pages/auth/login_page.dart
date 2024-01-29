@@ -81,14 +81,14 @@ class _LoginPageState extends State<LoginPage> {
             _buildThirdPartySignInMethod()
           ],
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 40),
-          child: CustomButton(text: 'Sign In', width: double.infinity),
+        Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: CustomButton(text: _locale.signInButton, width: double.infinity),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
           child: CustomButton(
-            text: 'Sign In using Face ID',
+            text: _locale.signInButtonFaceID,
             width: double.infinity,
             prefixIcon: Icons.add_reaction_outlined,
             secondary: true,

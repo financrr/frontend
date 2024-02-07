@@ -28,9 +28,9 @@ class _CustomButtonState extends State<CustomButton> {
       child: Container(
         width: widget.width,
         decoration: BoxDecoration(
-            color: widget.secondary ? _financrrTheme.primaryBackgroundColor : _financrrTheme.primaryAccentColor,
+            color: widget.secondary ? _financrrTheme.primaryBackgroundColor : _financrrTheme.primaryButtonColor,
             borderRadius: BorderRadius.circular(15),
-            border: widget.secondary ? Border.all(color: _financrrTheme.primaryAccentColor, width: 3) : null),
+            border: widget.secondary ? Border.all(color: _financrrTheme.primaryButtonColor, width: 3) : null),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -39,12 +39,12 @@ class _CustomButtonState extends State<CustomButton> {
               Padding(
                 padding: const EdgeInsets.only(right: 7),
                 child: Icon(widget.prefixIcon, size: 20,
-                    color: widget.secondary ? _financrrTheme.primaryAccentColor : _financrrTheme.primaryBackgroundColor),
+                    color: widget.secondary ? _financrrTheme.primaryTextColor : _financrrTheme.primaryButtonTextColor),
               ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 17),
               child: _textStyles.bodyMedium.text(widget.text,
-                  color: widget.secondary ? _financrrTheme.primaryAccentColor : _financrrTheme.primaryBackgroundColor,
+                  color: widget.secondary ? _financrrTheme.primaryTextColor : _financrrTheme.primaryButtonTextColor,
                   fontWeightOverride: FontWeight.w700),
             ),
           ],

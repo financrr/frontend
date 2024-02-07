@@ -49,13 +49,13 @@ class _LoginPageState extends State<LoginPage> {
       width: MediaQuery.of(context).size.width / 1.2,
       child: Column(children: [
         Padding(padding: const EdgeInsets.only(top: 20), child: _buildTopRow()),
-        _textStyles.labelSmall.text('(Selfhosted, 1.0)', color: _financrrTheme.primaryAccentColor),
+        _textStyles.labelSmall.text('(Selfhosted, 1.0)', color: _financrrTheme.primaryHighlightColor),
         Padding(
           padding: const EdgeInsets.only(top: 40),
           child: SvgPicture.asset(_financrrTheme.logoPath!, width: 100),
         ),
         _textStyles.headlineSmall
-            .text(_getRandomSignInMessage(), color: _financrrTheme.primaryAccentColor, fontWeightOverride: FontWeight.w700),
+            .text(_getRandomSignInMessage(), color: _financrrTheme.primaryHighlightColor, fontWeightOverride: FontWeight.w700),
         Form(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,15 +109,15 @@ class _LoginPageState extends State<LoginPage> {
             children: [
                Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Icon(Icons.settings, size: 15, color: _financrrTheme.primaryAccentColor),
+                child: Icon(Icons.settings, size: 15, color: _financrrTheme.primaryHighlightColor),
               ),
               _textStyles.bodyMedium.text('financrr.jasonlessenich.dev',
-                  color: _financrrTheme.primaryAccentColor, fontWeightOverride: FontWeight.w700),
+                  color: _financrrTheme.primaryHighlightColor, fontWeightOverride: FontWeight.w700),
             ],
           ),
         ),
         const Spacer(),
-        ZoomTapAnimation(child: Icon(Icons.person_add, color: _financrrTheme.primaryAccentColor))
+        ZoomTapAnimation(child: Icon(Icons.person_add, color: _financrrTheme.primaryHighlightColor))
       ],
     );
   }

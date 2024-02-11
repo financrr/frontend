@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:financrr_frontend/themes.dart';
 import 'package:financrr_frontend/util/extensions.dart';
+import 'package:financrr_frontend/util/modal_sheet_utils.dart';
 import 'package:financrr_frontend/util/text_utils.dart';
 import 'package:financrr_frontend/widgets/animations/zoom_tap_animation.dart';
 import 'package:financrr_frontend/widgets/custom_button.dart';
@@ -82,15 +83,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 40),
-          child: CustomButton(text: _locale.signInButton, width: double.infinity),
+          child: CustomButton.primary(text: _locale.signInButton, width: double.infinity),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10),
-          child: CustomButton(
+          child: CustomButton.secondary(
             text: _locale.signInButtonFaceID,
             width: double.infinity,
             prefixIcon: Icons.add_reaction_outlined,
-            secondary: true,
           ),
         )
       ]),
@@ -105,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
         Icon(Icons.person_add, color: _financrrTheme.primaryBackgroundColor),
         const Spacer(),
         ZoomTapAnimation(
+          onTap: () => ModalSheets.showHostSelectModal(context),
           child: Row(
             children: [
               Padding(

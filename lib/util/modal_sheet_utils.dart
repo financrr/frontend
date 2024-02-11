@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:financrr_frontend/themes.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:financrr_frontend/util/text_utils.dart';
+import 'package:financrr_frontend/widgets/animations/zoom_tap_animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,53 @@ import '../widgets/custom_button.dart';
 
 class ModalSheets {
   const ModalSheets._();
+
+  static Future showHostSelectModal(BuildContext context) {
+    final FinancrrTheme financrrTheme = context.financrrTheme;
+    final AppTextStyles textStyles = AppTextStyles.of(context);
+    return showModalBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        backgroundColor: financrrTheme.primaryBackgroundColor,
+        builder: (ctx) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 20),
+                    child: textStyles.bodyLarge
+                        .text('Select Host', textAlign: TextAlign.center, fontWeightOverride: FontWeight.w500),
+                  ),
+                  Column(
+                      children: [
+                    CustomButton.tertiary(
+                        text: 'Financrr Cloud',
+                        width: double.infinity,
+                        prefixIcon: Icons.verified_outlined,
+                        subText: (context) => 'We’ll do the work for you in exchange for a small monthly fee.',
+                        onPressed: () => Navigator.of(context).pop("Close")),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: CustomButton.tertiary(
+                          text: 'Selfhosted',
+                          width: double.infinity,
+                          prefixIcon: Icons.computer_outlined,
+                          subText: (context) => 'Host your own financrr Instance! More Information on financrr.app/selfhost',
+                          onPressed: () => Navigator.of(context).pop("Close")),
+                    ),
+                  ])
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }
 
 class ModalSheetOption {
@@ -79,7 +128,7 @@ class ModalSheetUtils {
 
   static Widget _otherAction(BuildContext context,
       {required String label, void Function()? onTap, Color? primary, Color? secondary}) {
-    return CustomButton(
+    return CustomButton.primary(
       text: label,
       onPressed: () {
         Navigator.of(context).pop("Close");

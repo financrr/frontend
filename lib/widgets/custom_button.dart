@@ -38,7 +38,8 @@ class _CustomButtonState extends State<CustomButton> {
             if (widget.prefixIcon != null)
               Padding(
                 padding: const EdgeInsets.only(right: 7),
-                child: Icon(widget.prefixIcon, size: 20,
+                child: Icon(widget.prefixIcon,
+                    size: 20,
                     color: widget.secondary ? _financrrTheme.primaryTextColor : _financrrTheme.primaryButtonTextColor),
               ),
             Padding(

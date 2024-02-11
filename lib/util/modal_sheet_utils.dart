@@ -10,8 +10,6 @@ import '../widgets/custom_button.dart';
 
 class ModalSheets {
   const ModalSheets._();
-
-
 }
 
 class ModalSheetOption {
@@ -68,12 +66,10 @@ class ModalSheetUtils {
                 child: textStyles.bodyLarge.text(message, textAlign: TextAlign.center, fontWeightOverride: FontWeight.w500),
               ),
             Column(children: [
-              ...options
-                  .map((o) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child:
-                _otherAction(context, label: o.label, onTap: o.onTap, primary: o.primary, secondary: o.secondary),
-              )),
+              ...options.map((o) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: _otherAction(context, label: o.label, onTap: o.onTap, primary: o.primary, secondary: o.secondary),
+                  )),
             ])
           ],
         ),

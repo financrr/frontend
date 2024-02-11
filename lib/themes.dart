@@ -28,8 +28,7 @@ class AppThemes {
         primaryBackgroundColor: Color(0xFFFFFFFF),
         secondaryBackgroundColor: Color(0xFFEBEBEB),
         primaryButtonColor: Color(0xFF2C03E6),
-        primaryButtonTextColor: Color(0xFFFFFFFF)
-    );
+        primaryButtonTextColor: Color(0xFFFFFFFF));
     return AppTheme(
         id: 1,
         name: (_) => 'Light',
@@ -49,8 +48,7 @@ class AppThemes {
         primaryBackgroundColor: Color(0xFF132852),
         secondaryBackgroundColor: Color(0xFF3A5384),
         primaryButtonColor: Color(0xFFFFFFFF),
-        primaryButtonTextColor: Color(0xFF000000)
-    );
+        primaryButtonTextColor: Color(0xFF000000));
     return AppTheme(
         id: 2,
         name: (_) => 'Dark',

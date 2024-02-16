@@ -31,24 +31,37 @@ class ModalSheets {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 20),
-                    child: textStyles.bodyLarge
-                        .text('Select Host', textAlign: TextAlign.center, fontWeightOverride: FontWeight.w500),
-                  ),
-                  Column(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        ZoomTapAnimation(
+                            onTap: () => Navigator.of(context).pop("Close"),
+                            child: Icon(Icons.arrow_back, color: financrrTheme.primaryAccentColor)),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 20),
+                          child: textStyles.titleMedium.text('Select Host',
+                              textAlign: TextAlign.center,
+                              color: financrrTheme.primaryAccentColor,
+                              fontWeightOverride: FontWeight.w700),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                  Column(children: [
                     CustomButton.tertiary(
                         text: 'Financrr Cloud',
-                        width: double.infinity,
-                        prefixIcon: Icons.verified_outlined,
+                        prefixIcon: Icons.wb_cloudy_outlined,
                         subText: (context) => 'We’ll do the work for you in exchange for a small monthly fee.',
                         onPressed: () => Navigator.of(context).pop("Close")),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: CustomButton.tertiary(
                           text: 'Selfhosted',
-                          width: double.infinity,
-                          prefixIcon: Icons.computer_outlined,
+                          prefixIcon: Icons.language,
+                          suffixIcon: Icons.open_in_new_rounded,
                           subText: (context) => 'Host your own financrr Instance! More Information on financrr.app/selfhost',
                           onPressed: () => Navigator.of(context).pop("Close")),
                     ),

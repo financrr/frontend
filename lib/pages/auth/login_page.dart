@@ -45,56 +45,59 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildVerticalLayout(Size size) {
     return SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Center(
             child: SizedBox(
-      width: MediaQuery.of(context).size.width / 1.2,
-      child: Column(children: [
-        Padding(padding: const EdgeInsets.only(top: 20), child: _buildTopRow()),
-        _textStyles.labelSmall.text('(Selfhosted, 1.0)', color: _financrrTheme.primaryHighlightColor),
-        Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: SvgPicture.asset(_financrrTheme.logoPath!, width: 100),
-        ),
-        _textStyles.headlineSmall
-            .text(_getRandomSignInMessage(), color: _financrrTheme.primaryHighlightColor, fontWeightOverride: FontWeight.w700),
-        Form(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextUtils.paddedTitle(context, title: _locale.genericEmail),
-            CustomTextField(controller: _emailController, prefixIcon: Icons.email, hintText: _locale.genericEmailEnter),
-            TextUtils.paddedTitle(context, title: _locale.genericPassword),
-            CustomTextField(
-                controller: _passwordController, prefixIcon: Icons.key, hintText: _locale.genericPasswordEnter, hideable: true)
-          ],
-        )),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: _buildMethodDivider(),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildThirdPartySignInMethod(),
-            _buildThirdPartySignInMethod(),
-            _buildThirdPartySignInMethod(),
-            _buildThirdPartySignInMethod()
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: CustomButton.primary(text: _locale.signInButton, width: double.infinity),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: CustomButton.secondary(
-            text: _locale.signInButtonFaceID,
-            width: double.infinity,
-            prefixIcon: Icons.add_reaction_outlined,
-          ),
-        )
-      ]),
-    )));
+          width: MediaQuery.of(context).size.width / 1.2,
+          child: Column(children: [
+            Padding(padding: const EdgeInsets.only(top: 20), child: _buildTopRow()),
+            _textStyles.labelSmall.text('(Selfhosted, 1.0)', color: _financrrTheme.primaryHighlightColor),
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: SvgPicture.asset(_financrrTheme.logoPath!, width: 100),
+            ),
+            _textStyles.headlineSmall.text(_getRandomSignInMessage(),
+                color: _financrrTheme.primaryHighlightColor, fontWeightOverride: FontWeight.w700),
+            Form(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextUtils.paddedTitle(context, title: _locale.genericEmail),
+                CustomTextField(controller: _emailController, prefixIcon: Icons.email, hintText: _locale.genericEmailEnter),
+                TextUtils.paddedTitle(context, title: _locale.genericPassword),
+                CustomTextField(
+                    controller: _passwordController,
+                    prefixIcon: Icons.key,
+                    hintText: _locale.genericPasswordEnter,
+                    hideable: true)
+              ],
+            )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: _buildMethodDivider(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildThirdPartySignInMethod(),
+                _buildThirdPartySignInMethod(),
+                _buildThirdPartySignInMethod(),
+                _buildThirdPartySignInMethod()
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: CustomButton.primary(text: _locale.signInButton),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: CustomButton.secondary(
+                text: _locale.signInButtonFaceID,
+                prefixIcon: Icons.add_reaction_outlined,
+              ),
+            )
+          ]),
+        )));
   }
 
   Widget _buildTopRow() {

@@ -108,8 +108,8 @@ class Modals {
                   text: 'Use Custom Host',
                   onPressed: () {
                     HostService.setHostPreferences(controller.text).then((prefs) {
-                        Navigator.of(context).pop("Close");
-                        GlobalKeys.loginPageState.currentState?.checkHostUrl(prefs);
+                      Navigator.of(context).pop("Close");
+                      GlobalKeys.loginPage.currentState?.checkHostUrl(prefs);
                     });
                   }),
             ),

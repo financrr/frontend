@@ -37,11 +37,11 @@ class StreamWrapper<T> extends StatelessWidget {
 
   const StreamWrapper(
       {super.key,
-        required this.stream,
-        required this.onSuccess,
-        required this.onLoading,
-        required this.onError,
-        this.initialData});
+      required this.stream,
+      required this.onSuccess,
+      required this.onLoading,
+      required this.onError,
+      this.initialData});
 
   @override
   Widget build(BuildContext context) {

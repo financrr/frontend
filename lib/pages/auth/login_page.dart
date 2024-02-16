@@ -56,23 +56,22 @@ class LoginPageState extends State<LoginPage> {
   Future checkHostUrl(HostPreferences preferences) async {
     final String hostUrl = preferences.hostUrl;
     if (hostUrl.isEmpty) {
-      _hostStream.sink.add('');
+      _hostStream.add('');
       return;
     }
     await Future.delayed(const Duration(seconds: 3));
     // TODO: send host information
     int random = Random().nextInt(2);
     if (random == 0) {
-      _hostStream.sink.addError('Invalid Host');
+      _hostStream.addError('Invalid Host');
       return;
     }
-    _hostStream.sink.add(hostUrl);
+    _hostStream.add(hostUrl);
   }
 
   @override
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
-      key: GlobalKeys.loginPageState,
       resizeToAvoidBottomInset: false,
       verticalBuilder: (_, __, size) => SafeArea(child: _buildVerticalLayout(size)),
     );
@@ -94,8 +93,7 @@ class LoginPageState extends State<LoginPage> {
                       stream: _hostStream.stream,
                       onSuccess: (context, snap) => _buildHostSection(_HostStatus.valid),
                       onError: (context, snap) => _buildHostSection(_HostStatus.invalid),
-                      onLoading: (context, snap) => _buildHostSection(_HostStatus.loading)
-                  ),
+                      onLoading: (context, snap) => _buildHostSection(_HostStatus.loading)),
                   const Spacer(),
                   ZoomTapAnimation(child: Icon(Icons.person_add, color: _financrrTheme.primaryHighlightColor)),
                 ],
@@ -181,8 +179,7 @@ class LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-        if (preferences.hostUrl.isNotEmpty)
-          _textStyles.labelSmall.text(statusText, color: statusColor),
+        if (preferences.hostUrl.isNotEmpty) _textStyles.labelSmall.text(statusText, color: statusColor),
       ],
     );
   }

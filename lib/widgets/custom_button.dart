@@ -61,6 +61,7 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return ZoomTapAnimation(
+      onTap: widget.onPressed,
       child: Container(
           decoration: BoxDecoration(
               color: widget.buttonBackgroundColor(_financrrTheme),

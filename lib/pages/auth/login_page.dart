@@ -1,10 +1,14 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:financrr_frontend/data/host_repository.dart';
 import 'package:financrr_frontend/themes.dart';
+import 'package:financrr_frontend/util/constants.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:financrr_frontend/util/modal_sheet_utils.dart';
 import 'package:financrr_frontend/util/text_utils.dart';
 import 'package:financrr_frontend/widgets/animations/zoom_tap_animation.dart';
+import 'package:financrr_frontend/widgets/async_wrapper.dart';
 import 'package:financrr_frontend/widgets/custom_button.dart';
 import 'package:financrr_frontend/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +26,12 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key, this.redirectTo});
 
   @override
-  State<StatefulWidget> createState() => _LoginPageState();
+  State<StatefulWidget> createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
+  final StreamController<String> _hostStream = StreamController<String>.broadcast();
+
   late final AppLocalizations _locale = context.locale;
   late final AppTextStyles _textStyles = AppTextStyles.of(context);
   late final FinancrrTheme _financrrTheme = context.financrrTheme;
@@ -36,8 +42,37 @@ class _LoginPageState extends State<LoginPage> {
   final int _random = Random().nextInt(4) + 1;
 
   @override
+  void initState() {
+    super.initState();
+    checkHostUrl(HostService.get());
+  }
+
+  @override
+  void dispose() {
+    _hostStream.close();
+    super.dispose();
+  }
+
+  Future checkHostUrl(HostPreferences preferences) async {
+    final String hostUrl = preferences.hostUrl;
+    if (hostUrl.isEmpty) {
+      _hostStream.sink.add('');
+      return;
+    }
+    await Future.delayed(const Duration(seconds: 3));
+    // TODO: send host information
+    int random = Random().nextInt(2);
+    if (random == 0) {
+      _hostStream.sink.addError('Invalid Host');
+      return;
+    }
+    _hostStream.sink.add(hostUrl);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AdaptiveScaffold(
+      key: GlobalKeys.loginPageState,
       resizeToAvoidBottomInset: false,
       verticalBuilder: (_, __, size) => SafeArea(child: _buildVerticalLayout(size)),
     );
@@ -50,10 +85,24 @@ class _LoginPageState extends State<LoginPage> {
             child: SizedBox(
           width: MediaQuery.of(context).size.width / 1.2,
           child: Column(children: [
-            Padding(padding: const EdgeInsets.only(top: 20), child: _buildTopRow()),
-            _textStyles.labelSmall.text('(Selfhosted, 1.0)', color: _financrrTheme.primaryHighlightColor),
             Padding(
-              padding: const EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: [
+                  const Spacer(),
+                  StreamWrapper(
+                      stream: _hostStream.stream,
+                      onSuccess: (context, snap) => _buildHostSection(_HostStatus.valid),
+                      onError: (context, snap) => _buildHostSection(_HostStatus.invalid),
+                      onLoading: (context, snap) => _buildHostSection(_HostStatus.loading)
+                  ),
+                  const Spacer(),
+                  ZoomTapAnimation(child: Icon(Icons.person_add, color: _financrrTheme.primaryHighlightColor)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
               child: SvgPicture.asset(_financrrTheme.logoPath!, width: 100),
             ),
             _textStyles.headlineSmall.text(_getRandomSignInMessage(),
@@ -100,28 +149,40 @@ class _LoginPageState extends State<LoginPage> {
         )));
   }
 
-  Widget _buildTopRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildHostSection(_HostStatus status) {
+    final HostPreferences preferences = HostService.get();
+    final String statusText = switch (status) {
+      _HostStatus.loading => '(Checking status...)',
+      _HostStatus.valid => '(Selfhosted, Version 1.0)',
+      _HostStatus.invalid => '(Invalid Host, Check URL)'
+    };
+    final Color statusColor = switch (status) {
+      _HostStatus.loading => _financrrTheme.primaryHighlightColor,
+      _HostStatus.valid => _financrrTheme.primaryHighlightColor,
+      _HostStatus.invalid => const Color(0xFFFF0000)
+    };
+    final IconData statusIcon = switch (status) {
+      _HostStatus.loading => Icons.access_time_outlined,
+      _HostStatus.valid => Icons.check,
+      _HostStatus.invalid => Icons.close
+    };
+    return Column(
       children: [
-        // TODO: fix this lmao
-        Icon(Icons.person_add, color: _financrrTheme.primaryBackgroundColor),
-        const Spacer(),
         ZoomTapAnimation(
-          onTap: () => ModalSheets.showHostSelectModal(context),
+          onTap: () => Modals.hostSelectModal().show(context),
           child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Icon(Icons.settings, size: 15, color: _financrrTheme.primaryHighlightColor),
+                child: Icon(preferences.hostUrl.isNotEmpty ? statusIcon : Icons.settings, size: 15, color: statusColor),
               ),
-              _textStyles.bodyMedium.text('financrr.jasonlessenich.dev',
-                  color: _financrrTheme.primaryHighlightColor, fontWeightOverride: FontWeight.w700),
+              _textStyles.bodyMedium.text(preferences.hostUrl.isEmpty ? 'Select Host' : preferences.hostUrl,
+                  color: statusColor, fontWeightOverride: FontWeight.w700),
             ],
           ),
         ),
-        const Spacer(),
-        ZoomTapAnimation(child: Icon(Icons.person_add, color: _financrrTheme.primaryHighlightColor))
+        if (preferences.hostUrl.isNotEmpty)
+          _textStyles.labelSmall.text(statusText, color: statusColor),
       ],
     );
   }
@@ -163,3 +224,5 @@ class _LoginPageState extends State<LoginPage> {
     };
   }
 }
+
+enum _HostStatus { loading, valid, invalid }

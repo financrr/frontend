@@ -1,19 +1,27 @@
 import 'dart:io';
 
+import 'package:financrr_frontend/data/host_repository.dart';
 import 'package:financrr_frontend/themes.dart';
+import 'package:financrr_frontend/util/constants.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:financrr_frontend/util/text_utils.dart';
 import 'package:financrr_frontend/widgets/animations/zoom_tap_animation.dart';
+import 'package:financrr_frontend/widgets/custom_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/custom_button.dart';
 
-class ModalSheets {
-  const ModalSheets._();
+class Modal {
+  final String title;
+  final bool showCloseButton;
+  final Widget Function(BuildContext) child;
 
-  static Future showHostSelectModal(BuildContext context) {
+  const Modal._({required this.title, this.showCloseButton = true, required this.child});
+
+  Future show(BuildContext context) {
     final FinancrrTheme financrrTheme = context.financrrTheme;
     final AppTextStyles textStyles = AppTextStyles.of(context);
     return showModalBottomSheet(
@@ -41,7 +49,7 @@ class ModalSheets {
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 20),
-                          child: textStyles.titleMedium.text('Select Host',
+                          child: textStyles.titleMedium.text(title,
                               textAlign: TextAlign.center,
                               color: financrrTheme.primaryAccentColor,
                               fontWeightOverride: FontWeight.w700),
@@ -50,26 +58,62 @@ class ModalSheets {
                       ],
                     ),
                   ),
-                  Column(children: [
-                    CustomButton.tertiary(
-                        text: 'Financrr Cloud',
-                        prefixIcon: Icons.wb_cloudy_outlined,
-                        subText: (context) => 'We’ll do the work for you in exchange for a small monthly fee.',
-                        onPressed: () => Navigator.of(context).pop("Close")),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: CustomButton.tertiary(
-                          text: 'Selfhosted',
-                          prefixIcon: Icons.language,
-                          suffixIcon: Icons.open_in_new_rounded,
-                          subText: (context) => 'Host your own financrr Instance! More Information on financrr.app/selfhost',
-                          onPressed: () => Navigator.of(context).pop("Close")),
-                    ),
-                  ])
+                  child(context)
                 ],
               ),
             ),
           );
+        });
+  }
+}
+
+class Modals {
+  const Modals._();
+
+  static Modal hostSelectModal() {
+    return Modal._(
+        title: 'Select Host',
+        child: (context) => Column(children: [
+              CustomButton.tertiary(
+                  text: 'Financrr Cloud',
+                  prefixIcon: Icons.wb_cloudy_outlined,
+                  subText: (context) => 'We’ll do the work for you in exchange for a small monthly fee.',
+                  onPressed: () => Navigator.of(context).pop("Close")),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: CustomButton.tertiary(
+                    text: 'Selfhosted',
+                    prefixIcon: Icons.language,
+                    suffixIcon: Icons.open_in_new_rounded,
+                    subText: (context) => 'Host your own financrr Instance! More Information on financrr.app/selfhost',
+                    onPressed: () {
+                      Navigator.of(context).pop("Close");
+                      Modals.customHostEnterModal(TextEditingController()).show(context);
+                    }),
+              ),
+            ]));
+  }
+
+  static Modal customHostEnterModal(TextEditingController controller) {
+    return Modal._(
+        title: 'Enter Custom Host',
+        child: (context) {
+          final AppLocalizations locale = context.locale;
+          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            TextUtils.paddedTitle(context, title: locale.genericURL, topPadding: false),
+            CustomTextField(controller: controller, prefixIcon: Icons.link, hintText: locale.genericURLEnter),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: CustomButton.primary(
+                  text: 'Use Custom Host',
+                  onPressed: () {
+                    HostService.setHostPreferences(controller.text).then((prefs) {
+                        Navigator.of(context).pop("Close");
+                        GlobalKeys.loginPageState.currentState?.checkHostUrl(prefs);
+                    });
+                  }),
+            ),
+          ]);
         });
   }
 }

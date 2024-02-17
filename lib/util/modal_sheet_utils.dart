@@ -43,9 +43,10 @@ class Modal {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ZoomTapAnimation(
-                            onTap: () => Navigator.of(context).pop("Close"),
-                            child: Icon(Icons.arrow_back, color: financrrTheme.primaryAccentColor)),
+                        if (showCloseButton)
+                          ZoomTapAnimation(
+                              onTap: () => Navigator.of(context).pop("Close"),
+                              child: Icon(Icons.arrow_back, color: financrrTheme.primaryAccentColor)),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 20),

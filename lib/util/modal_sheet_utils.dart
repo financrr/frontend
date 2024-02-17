@@ -107,7 +107,9 @@ class Modals {
               child: CustomButton.primary(
                   text: 'Use Custom Host',
                   onPressed: () {
-                    HostService.setHostPreferences(controller.text).then((prefs) {
+                    String url = controller.text;
+                    if (!url.startsWith("https://")) url = "https://$url";
+                    HostService.setHostPreferences(url).then((prefs) {
                       Navigator.of(context).pop("Close");
                       GlobalKeys.loginPage.currentState?.checkHostUrl(prefs);
                     });

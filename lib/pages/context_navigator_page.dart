@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:financrr_frontend/data/host_repository.dart';
 import 'package:financrr_frontend/main.dart';
 import 'package:financrr_frontend/pages/auth/login_page.dart';
 import 'package:financrr_frontend/themes.dart';

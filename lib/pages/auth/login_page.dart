@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:financrr_frontend/data/host_repository.dart';
 import 'package:financrr_frontend/themes.dart';
-import 'package:financrr_frontend/util/constants.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:financrr_frontend/util/modal_sheet_utils.dart';
 import 'package:financrr_frontend/util/text_utils.dart';
@@ -14,6 +13,7 @@ import 'package:financrr_frontend/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:restrr/restrr.dart';
 
 import '../../layout/adaptive_scaffold.dart';
 import '../../router.dart';
@@ -30,7 +30,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final StreamController<String> _hostStream = StreamController<String>.broadcast();
+  final StreamController<RestResponse<HealthResponse>?> _hostStream = StreamController.broadcast();
 
   late final AppLocalizations _locale = context.locale;
   late final AppTextStyles _textStyles = AppTextStyles.of(context);
@@ -53,20 +53,19 @@ class LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  /// Checks whether the specified [HostPreferences] are valid.
   Future checkHostUrl(HostPreferences preferences) async {
+    _hostStream.sink.add(null);
     final String hostUrl = preferences.hostUrl;
-    if (hostUrl.isEmpty) {
-      _hostStream.add('');
+    if (hostUrl.isEmpty || Uri.tryParse(hostUrl) == null) {
       return;
     }
-    await Future.delayed(const Duration(seconds: 3));
-    // TODO: send host information
-    int random = Random().nextInt(2);
-    if (random == 0) {
-      _hostStream.addError('Invalid Host');
-      return;
+    final RestResponse<HealthResponse> response = await Restrr.checkUri(Uri.parse(hostUrl));
+    if (response.hasData) {
+      _hostStream.sink.add(response);
+    } else {
+      _hostStream.sink.addError(response);
     }
-    _hostStream.add(hostUrl);
   }
 
   @override
@@ -91,9 +90,9 @@ class LoginPageState extends State<LoginPage> {
                   const Spacer(),
                   StreamWrapper(
                       stream: _hostStream.stream,
-                      onSuccess: (context, snap) => _buildHostSection(_HostStatus.valid),
-                      onError: (context, snap) => _buildHostSection(_HostStatus.invalid),
-                      onLoading: (context, snap) => _buildHostSection(_HostStatus.loading)),
+                      onSuccess: (context, snap) => _buildHostSection(response: snap.data),
+                      onError: (context, snap) => _buildHostSection(response: snap.error as RestResponse<HealthResponse>?),
+                      onLoading: (context, snap) => _buildHostSection()),
                   const Spacer(),
                   ZoomTapAnimation(child: Icon(Icons.person_add, color: _financrrTheme.primaryHighlightColor)),
                 ],
@@ -121,7 +120,18 @@ class LoginPageState extends State<LoginPage> {
             )),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: _buildMethodDivider(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: Divider(thickness: 3, color: _financrrTheme.secondaryBackgroundColor)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: _textStyles.bodyMedium.text(_locale.signInMethodDivider,
+                        color: _financrrTheme.secondaryBackgroundColor, fontWeightOverride: FontWeight.w800),
+                  ),
+                  Expanded(child: Divider(thickness: 3, color: _financrrTheme.secondaryBackgroundColor))
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -147,54 +157,40 @@ class LoginPageState extends State<LoginPage> {
         )));
   }
 
-  Widget _buildHostSection(_HostStatus status) {
+  Widget _buildHostSection({RestResponse<HealthResponse>? response}) {
     final HostPreferences preferences = HostService.get();
-    final String statusText = switch (status) {
-      _HostStatus.loading => '(Checking status...)',
-      _HostStatus.valid => '(Selfhosted, Version 1.0)',
-      _HostStatus.invalid => '(Invalid Host, Check URL)'
-    };
-    final Color statusColor = switch (status) {
-      _HostStatus.loading => _financrrTheme.primaryHighlightColor,
-      _HostStatus.valid => _financrrTheme.primaryHighlightColor,
-      _HostStatus.invalid => const Color(0xFFFF0000)
-    };
-    final IconData statusIcon = switch (status) {
-      _HostStatus.loading => Icons.access_time_outlined,
-      _HostStatus.valid => Icons.check,
-      _HostStatus.invalid => Icons.close
-    };
+    final String statusText = response == null
+        ? 'Checking /api/status/health...'
+        : response.hasData
+            ? response.data!.healthy
+                ? 'Healthy, API v${response.data!.apiVersion}'
+                : response.data!.details ?? 'Unhealthy, check server logs'
+            : 'Could not reach host';
+    final Color statusColor = response == null || response.hasData
+        ? _financrrTheme.primaryHighlightColor
+        : const Color(0xFFFF6666); // TODO: add to theme
+    final IconData statusIcon = response == null
+        ? Icons.access_time_outlined
+        : response.hasData && response.data!.healthy
+            ? Icons.check
+            : Icons.warning_amber;
     return Column(
       children: [
         ZoomTapAnimation(
           onTap: () => Modals.hostSelectModal().show(context),
-          child: Row(
+          child: _textStyles.bodyMedium.text(preferences.hostUrl.isEmpty ? 'Click to select Host' : preferences.hostUrl,
+              color: statusColor, fontWeightOverride: FontWeight.w700),
+        ),
+        if (preferences.hostUrl.isNotEmpty)
+          Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Icon(preferences.hostUrl.isNotEmpty ? statusIcon : Icons.settings, size: 15, color: statusColor),
+                child: Icon(statusIcon, size: 15, color: statusColor),
               ),
-              _textStyles.bodyMedium.text(preferences.hostUrl.isEmpty ? 'Select Host' : preferences.hostUrl,
-                  color: statusColor, fontWeightOverride: FontWeight.w700),
+              _textStyles.labelSmall.text(statusText, color: statusColor),
             ],
           ),
-        ),
-        if (preferences.hostUrl.isNotEmpty) _textStyles.labelSmall.text(statusText, color: statusColor),
-      ],
-    );
-  }
-
-  Widget _buildMethodDivider() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Divider(thickness: 3, color: _financrrTheme.secondaryBackgroundColor)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: _textStyles.bodyMedium.text(_locale.signInMethodDivider,
-              color: _financrrTheme.secondaryBackgroundColor, fontWeightOverride: FontWeight.w800),
-        ),
-        Expanded(child: Divider(thickness: 3, color: _financrrTheme.secondaryBackgroundColor))
       ],
     );
   }
@@ -221,5 +217,3 @@ class LoginPageState extends State<LoginPage> {
     };
   }
 }
-
-enum _HostStatus { loading, valid, invalid }

@@ -109,7 +109,7 @@ class Modals {
                   text: 'Use Custom Host',
                   onPressed: () {
                     String url = controller.text;
-                    if (!url.startsWith('https://') || !url.startsWith('http://')) {
+                    if (!url.startsWith('https://') && !url.startsWith('http://')) {
                       controller.text = 'https://$url';
                       return;
                     }

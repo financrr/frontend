@@ -40,7 +40,7 @@ class FinancrrApp extends StatefulWidget {
 class FinancrrAppState extends State<FinancrrApp> {
   AppTheme _activeLightTheme = AppThemes.light();
   AppTheme _activeDarkTheme = AppThemes.dark();
-  ThemeMode _themeMode = ThemeMode.dark;
+  ThemeMode _themeMode = ThemeMode.system;
 
   ThemeMode get themeMode => _themeMode;
   AppTheme get activeLightTheme => _activeLightTheme;

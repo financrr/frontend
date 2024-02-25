@@ -30,11 +30,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final StreamController<RestResponse<HealthResponse>?> _hostStream = StreamController.broadcast();
-
   late final AppLocalizations _locale = context.locale;
   late final TextTheme _textTheme = Theme.of(context).textTheme;
-  late final AppTextStyles _textStyles = AppTextStyles.of(context);
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -43,33 +40,6 @@ class LoginPageState extends State<LoginPage> {
 
   final int _random = Random().nextInt(4) + 1;
   bool _obscureText = true;
-
-  @override
-  void initState() {
-    super.initState();
-    checkHostUrl(HostService.get());
-  }
-
-  @override
-  void dispose() {
-    _hostStream.close();
-    super.dispose();
-  }
-
-  /// Checks whether the specified [HostPreferences] are valid.
-  Future checkHostUrl(HostPreferences preferences) async {
-    _hostStream.sink.add(null);
-    final String hostUrl = preferences.hostUrl;
-    if (hostUrl.isEmpty || Uri.tryParse(hostUrl) == null) {
-      return;
-    }
-    final RestResponse<HealthResponse> response = await Restrr.checkUri(Uri.parse(hostUrl));
-    if (response.hasData) {
-      _hostStream.sink.add(response);
-    } else {
-      _hostStream.sink.addError(response);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,20 +59,12 @@ class LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ZoomTapAnimation(
                       onTap: () => FinancrrApp.of(context)
                           .changeAppTheme(theme: context.lightMode ? AppThemes.dark() : AppThemes.light()),
                       child: Icon(context.lightMode ? Icons.nightlight_round : Icons.wb_sunny)),
-                  const Spacer(),
-                  StreamWrapper(
-                      stream: _hostStream.stream,
-                      onSuccess: (context, snap) => _buildHostSection(response: snap.data),
-                      onError: (context, snap) =>
-                          _buildHostSection(response: snap.error as RestResponse<HealthResponse>?),
-                      onLoading: (context, snap) => _buildHostSection()),
-                  const Spacer(),
-                  const ZoomTapAnimation(child: Icon(Icons.person_add)),
                 ],
               ),
             ),
@@ -111,7 +73,7 @@ class LoginPageState extends State<LoginPage> {
               child: SvgPicture.asset(context.appTheme.logoPath, width: 100),
             ),
            Text(
-             style: _textTheme.titleLarge,
+             style: _textTheme.titleLarge?.copyWith(color: context.theme.primaryColor),
                 switch (_random) {
                   1 => _locale.signInMessage1,
                   2 => _locale.signInMessage2,
@@ -149,7 +111,7 @@ class LoginPageState extends State<LoginPage> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: FilledButton(
+                  child: ElevatedButton(
                     onPressed: _handleLogin,
                     statesController: _signInButtonStatesController,
                     child: Text(_locale.signInButton),
@@ -185,7 +147,7 @@ class LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.only(right: 5),
                 child: Icon(statusIcon, size: 15),
               ),
-              Text(style: _textTheme.labelSmall, statusText),
+              Text(style: context.textTheme.labelSmall, statusText),
             ],
           ),
       ],

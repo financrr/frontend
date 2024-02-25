@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:financrr_frontend/layout/templates/auth_page_template.dart';
 import 'package:financrr_frontend/pages/core/dashboard_page.dart';
 import 'package:financrr_frontend/util/extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restrr/restrr.dart';
@@ -93,7 +94,9 @@ class LoginPageState extends State<LoginPage> {
       return;
     }
     final RestResponse<Restrr> response =
-        await RestrrBuilder.login(uri: Restrr.hostInformation.hostUri!, username: username, password: password).create();
+        await (RestrrBuilder.login(uri: Restrr.hostInformation.hostUri!, username: username, password: password)
+              ..options = const RestrrOptions(isWeb: kIsWeb))
+            .create();
     if (!mounted) return;
     if (response.hasData) {
       context.authNotifier.setApi(response.data!);

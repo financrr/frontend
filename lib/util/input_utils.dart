@@ -8,7 +8,7 @@ class InputValidators {
       return null;
     }
     final Uri? uri = Uri.tryParse(value);
-    if (uri == null || !uri.hasAbsolutePath) {
+    if (uri == null || !uri.isAbsolute) {
       return 'Please provide a valid URL';
     }
     return null;

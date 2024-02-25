@@ -52,9 +52,10 @@ class ServerInfoPageState extends State<ServerInfoPage> {
                     decoration: const InputDecoration(labelText: 'Server URL'),
                     autofillHints: const [AutofillHints.username],
                     validator: (value) => InputValidators.url(context, value),
+                    onChanged: (_) => setState(() => _isValid = false),
                   ),
                 ),
-                if (Restrr.hostInformation.apiVersion != -1)
+                if (_isValid && Restrr.hostInformation.apiVersion != -1)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Text('Status: Healthy, v${Restrr.hostInformation.apiVersion}',

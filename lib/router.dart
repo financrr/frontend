@@ -1,5 +1,6 @@
 import 'package:financrr_frontend/layout/scaffold_navbar_shell.dart';
 import 'package:financrr_frontend/pages/auth/login_page.dart';
+import 'package:financrr_frontend/pages/auth/server_info_page.dart';
 import 'package:financrr_frontend/pages/core/dashboard_page.dart';
 import 'package:financrr_frontend/pages/core/dummy_page.dart';
 import 'package:financrr_frontend/util/constants.dart';
@@ -20,34 +21,24 @@ class AppRouter {
       ..._noShellRoutes(),
       GoRoute(path: '/', redirect: (_, __) => '/@me/dashboard'),
       GoRoute(path: '/@me', redirect: (_, __) => '/@me/dashboard'),
-      StatefulShellRoute.indexedStack(
-          builder: (context, state, shell) => ScaffoldNavBarShell(navigationShell: shell),
-          branches: [
-            StatefulShellBranch(navigatorKey: shellNavigatorKey, routes: [
-              GoRoute(
-                  path: DashboardPage.pagePath.path,
-                  pageBuilder: _defaultBranchPageBuilder(const DashboardPage()),
-                  redirect: coreAuthGuard),
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: '/@me/a',
-                  pageBuilder: _defaultBranchPageBuilder(const DummyPage(text: 'A')),
-                  redirect: coreAuthGuard),
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: '/@me/b',
-                  pageBuilder: _defaultBranchPageBuilder(const DummyPage(text: 'B')),
-                  redirect: coreAuthGuard),
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: '/@me/c',
-                  pageBuilder: _defaultBranchPageBuilder(const DummyPage(text: 'C')),
-                  redirect: coreAuthGuard),
-            ]),
-          ]),
+      StatefulShellRoute
+          .indexedStack(builder: (context, state, shell) => ScaffoldNavBarShell(navigationShell: shell), branches: [
+        StatefulShellBranch(navigatorKey: shellNavigatorKey, routes: [
+          GoRoute(
+              path: DashboardPage.pagePath.path,
+              pageBuilder: _defaultBranchPageBuilder(const DashboardPage()),
+              redirect: coreAuthGuard),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/@me/a', pageBuilder: _defaultBranchPageBuilder(const DummyPage(text: 'A')), redirect: coreAuthGuard),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/@me/b', pageBuilder: _defaultBranchPageBuilder(const DummyPage(text: 'B')), redirect: coreAuthGuard),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/@me/c', pageBuilder: _defaultBranchPageBuilder(const DummyPage(text: 'C')), redirect: coreAuthGuard),
+        ]),
+      ]),
     ],
   );
 
@@ -55,9 +46,9 @@ class AppRouter {
     return [
       GoRoute(
           name: 'financrr — Login',
-          path: LoginPage.pagePath.path,
-          pageBuilder: (context, state) => _buildDefaultPageTransition(context, state,
-              LoginPage(key: GlobalKeys.loginPage, redirectTo: state.uri.queryParameters['redirectTo'])),
+          path: ServerInfoPage.pagePath.path,
+          pageBuilder: (context, state) =>
+              _buildDefaultPageTransition(context, state, ServerInfoPage(key: GlobalKeys.loginPage)),
           redirect: authGuard),
     ];
   }
@@ -70,9 +61,7 @@ class AppRouter {
   /// Checks whether the current user is authenticated. If not, this will redirect to the [LoginPage], including
   /// the `redirectTo` queryParam for the page the user was initially going to visit
   static String? coreAuthGuard(BuildContext context, GoRouterState state) {
-    return context.authNotifier.isAuthenticated
-        ? null
-        : LoginPage.pagePath.build(queryParams: {'redirectTo': state.fullPath}).fullPath;
+    return context.authNotifier.isAuthenticated ? null : ServerInfoPage.pagePath.build().fullPath;
   }
 
   static Page<T> _buildDefaultPageTransition<T>(BuildContext context, GoRouterState state, Widget child) {

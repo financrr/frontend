@@ -27,7 +27,7 @@ class AppThemes {
   static AppTheme light() {
     return AppTheme(
         id: 1,
-        logoPath: 'assets/logo/logo_blue.svg',
+        logoPath: 'assets/logo/logo_light.svg',
         nameFunction: (_) => 'Light',
         previewColor: Colors.white,
         themeMode: ThemeMode.light,
@@ -41,9 +41,7 @@ class AppThemes {
         nameFunction: (_) => 'Dark',
         previewColor: const Color(0xFF2B2D31),
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark,
-            const Color(0xFF2B73FF),
-            const Color(0xFF232326)));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF2B73FF), const Color(0xFF151517)));
   }
 
   static ThemeData _buildThemeData(Brightness brightness, Color primaryColor, Color backgroundColor) {
@@ -56,6 +54,47 @@ class AppThemes {
         trackHeight: 2.0,
       ),
     );
+    final TextTheme textTheme = TextTheme(
+      displayLarge: const TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+        color: Color.fromARGB(255, 255, 255, 255),
+      ),
+      displayMedium: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: Color.fromARGB(255, 255, 255, 255),
+      ),
+      displaySmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        color: primaryColor,
+      ),
+      titleSmall: const TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.bold,
+      ),
+      titleMedium: const TextStyle(
+        fontSize: 18.0,
+        fontWeight: FontWeight.bold,
+      ),
+      titleLarge: const TextStyle(
+        fontSize: 26.0,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyLarge: const TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.normal,
+      ),
+      bodyMedium: const TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.normal,
+      ),
+      bodySmall: const TextStyle(
+        fontSize: 12.0,
+        fontWeight: FontWeight.normal,
+      ),
+    );
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
@@ -64,9 +103,9 @@ class AppThemes {
       hintColor: Colors.grey[600],
       fontFamily: _fontFamily,
       snackBarTheme: SnackBarThemeData(
-        contentTextStyle: TextStyle(
+        contentTextStyle: const TextStyle(
           fontFamily: _fontFamily,
-          color: primaryColor,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
         backgroundColor: Colors.grey[900],
@@ -93,40 +132,17 @@ class AppThemes {
         backgroundColor: backgroundColor,
         scrimColor: Colors.white.withOpacity(0.1),
       ),
-      textTheme: TextTheme(
-        displayLarge: const TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 255, 255, 255),
-        ),
-        displayMedium: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 255, 255, 255),
-        ),
-        displaySmall: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: primaryColor,
-        ),
-        titleSmall: const TextStyle(
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
-        ),
-        titleMedium: const TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
-        titleLarge: const TextStyle(
-          fontSize: 26.0,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      textTheme: textTheme,
       cardColor: Colors.grey[900],
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
           backgroundColor: primaryColor,
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: primaryColor,
         ),
       ),
       chipTheme: base.chipTheme,
@@ -156,11 +172,8 @@ class AppThemes {
         surfaceTintColor: Colors.transparent,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: primaryColor,
-          ),
-        ),
+        labelStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+        border: const OutlineInputBorder(),
       ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: primaryColor,

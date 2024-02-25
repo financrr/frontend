@@ -38,8 +38,8 @@ class _ZoomTapAnimationState extends State<ZoomTapAnimation> with SingleTickerPr
   void initState() {
     super.initState();
     // initial AnimationController
-    _controller =
-        AnimationController(vsync: this, duration: widget.endDuration, value: 1.0, reverseDuration: widget.beginDuration);
+    _controller = AnimationController(
+        vsync: this, duration: widget.endDuration, value: 1.0, reverseDuration: widget.beginDuration);
     // initial tween animation
     _animation = Tween(begin: widget.end, end: widget.begin)
         .animate(CurvedAnimation(parent: _controller!, curve: widget.beginCurve, reverseCurve: widget.endCurve));

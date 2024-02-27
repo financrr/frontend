@@ -54,10 +54,11 @@ jobs:
           git add "pr-preview/pr-${PR_NUMBER}"
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Automated PR Preview for PR ${PR_NUMBER}"
-            git push origin HEAD
+            git push origin HEAD:gh-pages
           else
             echo "No changes to commit. Skipping push."
           fi
+
 
       - name: Delete old PR previews
         run: |

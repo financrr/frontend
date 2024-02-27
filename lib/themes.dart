@@ -20,7 +20,7 @@ class AppTheme {
 
 class AppThemes {
   static const String _fontFamily = 'Montserrat';
-  static final List<AppTheme> themes = [light(), dark()];
+  static final List<AppTheme> themes = [light(), dark(), amoledDark()];
 
   const AppThemes._();
 
@@ -41,9 +41,17 @@ class AppThemes {
         nameFunction: (_) => 'Dark',
         previewColor: const Color(0xFF2B2D31),
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark,
-            const Color(0xFF4B87FF),
-            const Color(0xFF151517)));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF151517)));
+  }
+
+  static AppTheme amoledDark() {
+    return AppTheme(
+        id: 3,
+        logoPath: 'assets/logo/logo_light.svg',
+        nameFunction: (_) => 'AMOLED Dark',
+        previewColor: const Color(0xFF000000),
+        themeMode: ThemeMode.dark,
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF000000)));
   }
 
   static ThemeData _buildThemeData(Brightness brightness, Color primaryColor, Color backgroundColor) {
@@ -113,22 +121,17 @@ class AppThemes {
         backgroundColor: Colors.grey[900],
       ),
       appBarTheme: AppBarTheme(
+        foregroundColor: brightness == Brightness.dark ? Colors.white : Colors.black,
         titleTextStyle: TextStyle(
           fontFamily: _fontFamily,
-          color: primaryColor,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           fontSize: 18,
+          color: brightness == Brightness.dark ? Colors.white : Colors.black,
         ),
-        backgroundColor: const Color.fromARGB(255, 32, 33, 35),
-        foregroundColor: primaryColor,
+        backgroundColor: brightness == Brightness.dark ? Colors.grey[900] : backgroundColor,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-      ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 35, 36, 37),
-        selectedItemColor: primaryColor,
       ),
       drawerTheme: DrawerThemeData(
         backgroundColor: backgroundColor,
@@ -156,17 +159,17 @@ class AppThemes {
         surfaceTintColor: Colors.transparent,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        indicatorColor: primaryColor.withOpacity(0.4),
+        indicatorColor: primaryColor.withOpacity(brightness == Brightness.dark ? 0.4 : 0.15),
         iconTheme: MaterialStatePropertyAll(
-          IconThemeData(color: Colors.grey[500]),
+          IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
         ),
-        backgroundColor: Colors.grey[900],
+        backgroundColor: brightness == Brightness.dark ? Colors.grey[900] : backgroundColor,
         surfaceTintColor: Colors.transparent,
         labelTextStyle: MaterialStatePropertyAll(
           TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: Colors.grey[300],
+            color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
           ),
         ),
       ),
@@ -183,6 +186,10 @@ class AppThemes {
       ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: primaryColor,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStatePropertyAll(primaryColor),
+        trackColor: MaterialStatePropertyAll(primaryColor.withOpacity(0.5)),
       ),
     );
   }

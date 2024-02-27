@@ -42,6 +42,17 @@ jobs:
           cp -r build/web/* "${PREVIEW_DIR}/"
           echo "${PREVIEW_URL}" > "${PREVIEW_DIR}/url.txt"
 
+      - name: Pull changes from remote gh-pages branch
+        run: |
+          git fetch --prune
+          if git show-ref --quiet refs/remotes/origin/gh-pages; then
+            git checkout gh-pages
+            git pull origin gh-pages
+          else
+            echo "No gh-pages branch found. Skipping pull."
+          fi
+          git checkout ${{ github.head_ref }}
+
       - name: Commit and push PR preview changes
         run: |
           PR_NUMBER=${{ github.event.number }}
@@ -61,15 +72,19 @@ jobs:
 
       - name: Delete old PR previews
         run: |
-          git fetch --prune
-          for dir in $(ls -d pr-preview/*); do
-            if [[ ! -f "pr-preview/${dir}/url.txt" ]]; then
-              PR_NUMBER=$(echo "${dir}" | awk 'BEGIN { FS = "-" } ; { print $2 }')
-              git rm -r "pr-preview/pr-${PR_NUMBER}"
-              git commit -m "Delete old PR preview for PR ${PR_NUMBER}"
-            fi
-          done
-          git push origin HEAD
+          if [ -d "pr-preview" ]; then
+            git fetch --prune
+            for dir in $(ls -d pr-preview/*); do
+              if [[ ! -f "pr-preview/${dir}/url.txt" ]]; then
+                PR_NUMBER=$(echo "${dir}" | awk 'BEGIN { FS = "-" } ; { print $2 }')
+                git rm -r "pr-preview/pr-${PR_NUMBER}"
+                git commit -m "Delete old PR preview for PR ${PR_NUMBER}"
+              fi
+            done
+            git push origin HEAD
+          else
+            echo "No old PR previews to delete."
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

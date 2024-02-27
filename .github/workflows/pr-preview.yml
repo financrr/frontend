@@ -26,13 +26,14 @@ jobs:
 
       - name: Build web
         run: flutter build web --release --base-href /frontend/
-
+        
       - name: Generate PR Preview
         run: |
           PR_NUMBER=$(echo "${GITHUB_REF}" | awk 'BEGIN { FS = "/" } ; { print $3 }')
           PREVIEW_DIR="pr-preview/pr-${PR_NUMBER}"
           PREVIEW_URL="https://financrr.github.io/frontend/pr-preview/pr-${PR_NUMBER}/"
-          cp -r build/web "${PREVIEW_DIR}"
+          mkdir -p "${PREVIEW_DIR}"
+          cp -r build/web/* "${PREVIEW_DIR}/"
           echo "${PREVIEW_URL}" > "${PREVIEW_DIR}/url.txt"
 
       - name: Commit and push PR preview changes

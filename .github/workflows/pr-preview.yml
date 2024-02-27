@@ -1,112 +1,36 @@
-name: PR Preview Deploy
+# .github/workflows/preview.yml
+name: Deploy PR previews
 concurrency: preview-${{ github.ref }}
-
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed]
-  push:
-    branches: [development]
-
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 jobs:
-  build:
+  deploy-preview:
     runs-on: ubuntu-latest
-
+    
     permissions:
       contents: write
       pull-requests: write
       pages: write
       id-token: write
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Flutter
+      - uses: actions/checkout@v4
+      - name: 'Set Flutter 3.19.0'
         uses: subosito/flutter-action@v2
-        with:
+        with: 
           flutter-version: 3.19.0
-
-      - name: Flutter clean and upgrade
-        run: |
-          flutter clean
-          flutter pub upgrade
-
-      - name: Build web
-        run: flutter build web --release --base-href /frontend/
-
-      - name: Generate PR Preview
-        run: |
-          PR_NUMBER=${{ github.event.number }}
-          PREVIEW_DIR="pr-preview/pr-${PR_NUMBER}"
-          PREVIEW_URL="https://financrr.github.io/frontend/pr-preview/pr-${PR_NUMBER}/"
-          mkdir -p "${PREVIEW_DIR}"
-          cp -r build/web/* "${PREVIEW_DIR}/"
-          echo "${PREVIEW_URL}" > "${PREVIEW_DIR}/url.txt"
-
-      - name: Print preview link
-        run: |
-          PR_NUMBER=${{ github.event.number }}
-          PREVIEW_URL="https://financrr.github.io/frontend/pr-preview/pr-${PR_NUMBER}/"
-          echo "Preview link: ${PREVIEW_URL}"
-
-      - name: Check for untracked files
-        run: |
-          cd $GITHUB_WORKSPACE
-          if [ -d "pr-preview" ]; then
-            cd pr-preview
-            git fetch --prune
-            if git status --porcelain | grep -q "^\?\?"; then
-              git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
-            fi
-          else
-            echo "No pr-preview directory found. Skipping untracked files check."
-          fi
-
-      - name: Pull changes from remote gh-pages branch
-        run: |
-          git fetch --prune
-          if git show-ref --quiet refs/remotes/origin/gh-pages; then
-            git checkout gh-pages
-            git pull origin gh-pages
-          else
-            echo "No gh-pages branch found. Skipping pull."
-          fi
-          git checkout ${{ github.head_ref }}
-
-      - name: Check for untracked files
-        run: |
-          cd $GITHUB_WORKSPACE
-          if [ ! -d "pr-preview" ]; then
-            echo "Creating pr-preview directory..."
-            mkdir pr-preview
-          fi
-          if [ -d "pr-preview" ]; then
-            git fetch --prune
-            if git status --porcelain | grep -q "^\?\?"; then
-              git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
-            fi
-          else
-            echo "No pr-preview directory found. Skipping untracked files check."
-          fi
-
-      - name: Add comment to PR
-        uses: actions/github-script@v5
+      - run: flutter clean
+      - run: flutter pub upgrade
+      - run: flutter build web --release --base-href /frontend/
+        if: github.event.action != 'closed'
+      - uses: rossjrw/pr-preview-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { context, github } = require('@actions/github');
-            const previewUrl = `https://financrr.github.io/frontend/pr-preview/pr-${context.payload.pull_request.number}/`;
-            const comment = `Preview link: ${previewUrl}`;
-            github.issues.createComment({
-              issue_number: context.payload.pull_request.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./pr-preview
-  
+          source-dir: .
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: auto

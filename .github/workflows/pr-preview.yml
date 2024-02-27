@@ -1,38 +1,62 @@
-# .github/workflows/preview.yml
-name: Deploy PR previews
-concurrency: preview-${{ github.ref }}
+name: PR Preview Deploy
+
 on:
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - closed
+    types: [opened, reopened, synchronize, closed]
+  push:
+    branches: [development]
 
 jobs:
-  deploy-preview:
+  build:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-    
     steps:
-      - uses: actions/checkout@v4
-      - name: 'Set Flutter 3.19.0'
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
-        with: 
-          flutter-version: 3.19.0
-      - run: flutter clean
-        if: github.event.action != 'closed'
-      - run: flutter pub upgrade
-        if: github.event.action != 'closed'
-      - run: flutter build web --release
-        if: github.event.action != 'closed'
-      - uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: .
-          preview-branch: gh-pages
-          umbrella-dir: pr-preview
-          action: auto
+          flutter-version: 3.19.0
+
+      - name: Flutter clean and upgrade
+        run: |
+          flutter clean
+          flutter pub upgrade
+
+      - name: Build web
+        run: flutter build web --release --base-href /frontend/
+
+      - name: Generate PR Preview
+        run: |
+          PR_NUMBER=$(echo "${GITHUB_REF}" | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          PREVIEW_DIR="pr-preview/pr-${PR_NUMBER}"
+          PREVIEW_URL="https://financrr.github.io/frontend/pr-preview/pr-${PR_NUMBER}/"
+          cp -r build/web "${PREVIEW_DIR}"
+          echo "${PREVIEW_URL}" > "${PREVIEW_DIR}/url.txt"
+
+      - name: Commit and push PR preview changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "${PREVIEW_DIR}"
+          git commit -m "Automated PR Preview for PR ${PR_NUMBER}"
+          git push origin HEAD
+
+      - name: Delete old PR previews
+        run: |
+          git fetch --prune
+          for dir in $(ls -d pr-preview/*); do
+            if [[ ! -f "pr-preview/${dir}/url.txt" ]]; then
+              PR_NUMBER=$(echo "${dir}" | awk 'BEGIN { FS = "-" } ; { print $2 }')
+              git rm -r "pr-preview/pr-${PR_NUMBER}"
+              git commit -m "Delete old PR preview for PR ${PR_NUMBER}"
+            fi
+          done
+          git push origin HEAD
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./pr-preview

@@ -73,21 +73,20 @@ jobs:
           fi
           git checkout ${{ github.head_ref }}
 
-      - name: Commit and push PR preview changes
+      - name: Check for untracked files
         run: |
-          PR_NUMBER=${{ github.event.number }}
-          if [ -z "${PR_NUMBER}" ]; then
-            echo "Error: PR_NUMBER is empty. Skipping commit and push."
-            exit 1
+          cd $GITHUB_WORKSPACE
+          if [ ! -d "pr-preview" ]; then
+            echo "Creating pr-preview directory..."
+            mkdir pr-preview
           fi
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add "pr-preview/pr-${PR_NUMBER}"
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Automated PR Preview for PR ${PR_NUMBER}"
-            git push origin HEAD:gh-pages --force
+          if [ -d "pr-preview" ]; then
+            git fetch --prune
+            if git status --porcelain | grep -q "^\?\?"; then
+              git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
+            fi
           else
-            echo "No changes to commit. Skipping push."
+            echo "No pr-preview directory found. Skipping untracked files check."
           fi
 
       - name: Add comment to PR

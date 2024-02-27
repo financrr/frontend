@@ -1,0 +1,38 @@
+# .github/workflows/preview.yml
+name: Deploy PR previews
+concurrency: preview-${{ github.ref }}
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Set Flutter 3.19.0'
+        uses: subosito/flutter-action@v2
+        with: 
+          flutter-version: 3.19.0
+      - run: flutter clean
+        if: github.event.action != 'closed'
+      - run: flutter pub upgrade
+        if: github.event.action != 'closed'
+      - run: flutter build web --release
+        if: github.event.action != 'closed'
+      - uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: .
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: auto

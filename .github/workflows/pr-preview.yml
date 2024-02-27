@@ -13,6 +13,7 @@ jobs:
 
     permissions:
       contents: write
+      pull-requests: write
       pages: write
       id-token: write
 
@@ -50,8 +51,12 @@ jobs:
 
       - name: Check for untracked files
         run: |
-          if git status --porcelain | grep -q "^\?\?"; then
-            git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
+          if [ -d "pr-preview" ]; then
+            if git status --porcelain | grep -q "^\?\?"; then
+              git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
+            fi
+          else
+            echo "No untracked files to check."
           fi
 
       - name: Pull changes from remote gh-pages branch
@@ -82,24 +87,24 @@ jobs:
             echo "No changes to commit. Skipping push."
           fi
 
-      - name: Delete old PR previews
-        run: |
-          if [ -d "pr-preview" ]; then
-            git fetch --prune
-            for dir in $(ls -d pr-preview/*/); do
-              if [[ ! -f "${dir}/url.txt" ]]; then
-                PR_NUMBER=$(basename "${dir}")
-                git rm -r "${dir}"
-                git commit -m "Delete old PR preview for PR ${PR_NUMBER}"
-              fi
-            done
-            git push origin HEAD
-          else
-            echo "No old PR previews to delete."
-          fi
+      - name: Add comment to PR
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { context, github } = require('@actions/github');
+            const previewUrl = `https://financrr.github.io/frontend/pr-preview/pr-${context.payload.pull_request.number}/`;
+            const comment = `Preview link: ${previewUrl}`;
+            github.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./pr-preview
+  

@@ -48,6 +48,12 @@ jobs:
           PREVIEW_URL="https://financrr.github.io/frontend/pr-preview/pr-${PR_NUMBER}/"
           echo "Preview link: ${PREVIEW_URL}"
 
+      - name: Check for untracked files
+        run: |
+          if git status --porcelain | grep -q "^\?\?"; then
+            git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
+          fi
+
       - name: Pull changes from remote gh-pages branch
         run: |
           git fetch --prune

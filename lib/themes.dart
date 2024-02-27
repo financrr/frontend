@@ -41,7 +41,7 @@ class AppThemes {
         nameFunction: (_) => 'Dark',
         previewColor: const Color(0xFF2B2D31),
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF151517)));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF101010)));
   }
 
   static AppTheme amoledDark() {
@@ -128,7 +128,7 @@ class AppThemes {
           fontSize: 18,
           color: brightness == Brightness.dark ? Colors.white : Colors.black,
         ),
-        backgroundColor: brightness == Brightness.dark ? Colors.grey[900] : backgroundColor,
+        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.25) : backgroundColor,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
@@ -163,7 +163,7 @@ class AppThemes {
         iconTheme: MaterialStatePropertyAll(
           IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
         ),
-        backgroundColor: brightness == Brightness.dark ? Colors.grey[900] : backgroundColor,
+        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.25) : backgroundColor,
         surfaceTintColor: Colors.transparent,
         labelTextStyle: MaterialStatePropertyAll(
           TextStyle(
@@ -190,6 +190,7 @@ class AppThemes {
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStatePropertyAll(primaryColor),
         trackColor: MaterialStatePropertyAll(primaryColor.withOpacity(0.5)),
+        trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
       ),
     );
   }

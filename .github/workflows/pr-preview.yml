@@ -80,10 +80,10 @@ jobs:
         run: |
           if [ -d "pr-preview" ]; then
             git fetch --prune
-            for dir in $(ls -d pr-preview/*); do
-              if [[ ! -f "pr-preview/${dir}/url.txt" ]]; then
-                PR_NUMBER=$(echo "${dir}" | awk 'BEGIN { FS = "-" } ; { print $2 }')
-                git rm -r "pr-preview/pr-${PR_NUMBER}"
+            for dir in $(ls -d pr-preview/*/); do
+              if [[ ! -f "${dir}/url.txt" ]]; then
+                PR_NUMBER=$(basename "${dir}")
+                git rm -r "${dir}"
                 git commit -m "Delete old PR preview for PR ${PR_NUMBER}"
               fi
             done

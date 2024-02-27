@@ -1,4 +1,5 @@
 name: PR Preview Deploy
+concurrency: preview-${{ github.ref }}
 
 on:
   pull_request:
@@ -26,10 +27,10 @@ jobs:
 
       - name: Build web
         run: flutter build web --release --base-href /frontend/
-        
+
       - name: Generate PR Preview
         run: |
-          PR_NUMBER=$(echo "${GITHUB_REF}" | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          PR_NUMBER=${{ github.event.number }}
           PREVIEW_DIR="pr-preview/pr-${PR_NUMBER}"
           PREVIEW_URL="https://financrr.github.io/frontend/pr-preview/pr-${PR_NUMBER}/"
           mkdir -p "${PREVIEW_DIR}"
@@ -38,11 +39,20 @@ jobs:
 
       - name: Commit and push PR preview changes
         run: |
+          PR_NUMBER=${{ github.event.number }}
+          if [ -z "${PR_NUMBER}" ]; then
+            echo "Error: PR_NUMBER is empty. Skipping commit and push."
+            exit 1
+          fi
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add "pr-preview/pr-${PR_NUMBER}"
-          git commit -m "Automated PR Preview for PR ${PR_NUMBER}"
-          git push origin HEAD
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Automated PR Preview for PR ${PR_NUMBER}"
+            git push origin HEAD
+          else
+            echo "No changes to commit. Skipping push."
+          fi
 
       - name: Delete old PR previews
         run: |

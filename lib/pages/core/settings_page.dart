@@ -1,4 +1,5 @@
 import 'package:financrr_frontend/pages/auth/server_info_page.dart';
+import 'package:financrr_frontend/pages/core/settings/currency_settings_page.dart';
 import 'package:financrr_frontend/pages/core/settings/theme_settings_page.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,15 @@ class _SettingsPageState extends State<SettingsPage> {
     ),
     Card.outlined(
       child: ListTile(
-        onTap: () {
-          context.pushPath(ThemeSettingsPage.pagePath.build());
-        },
+        onTap: () => context.pushPath(CurrencySettingsPage.pagePath.build()),
+        leading: const Icon(Icons.currency_exchange),
+        title: const Text('Currency'),
+        subtitle: const Text('Manage (custom) currencies'),
+      ),
+    ),
+    Card.outlined(
+      child: ListTile(
+        onTap: () => context.pushPath(ThemeSettingsPage.pagePath.build()),
         leading: const Icon(Icons.brightness_4_outlined),
         title: const Text('Theme'),
         subtitle: const Text('Toggle between light and dark mode'),

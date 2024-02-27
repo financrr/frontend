@@ -1,6 +1,7 @@
 import 'package:financrr_frontend/layout/scaffold_navbar_shell.dart';
 import 'package:financrr_frontend/pages/auth/login_page.dart';
 import 'package:financrr_frontend/pages/auth/server_info_page.dart';
+import 'package:financrr_frontend/pages/core/settings/currency_settings_page.dart';
 import 'package:financrr_frontend/pages/core/settings/theme_settings_page.dart';
 import 'package:financrr_frontend/pages/core/settings_page.dart';
 import 'package:financrr_frontend/pages/core/dashboard_page.dart';
@@ -66,6 +67,10 @@ class AppRouter {
       GoRoute(
           path: ThemeSettingsPage.pagePath.path,
           pageBuilder: _defaultBranchPageBuilder(const ThemeSettingsPage()),
+          redirect: coreAuthGuard),
+      GoRoute(
+          path: CurrencySettingsPage.pagePath.path,
+          pageBuilder: _defaultBranchPageBuilder(const CurrencySettingsPage()),
           redirect: coreAuthGuard)
     ];
   }

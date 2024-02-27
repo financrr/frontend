@@ -53,6 +53,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           if [ -d "pr-preview" ]; then
+            cd pr-preview
             git fetch --prune
             if git status --porcelain | grep -q "^\?\?"; then
               git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r

@@ -51,12 +51,14 @@ jobs:
 
       - name: Check for untracked files
         run: |
+          cd $GITHUB_WORKSPACE
           if [ -d "pr-preview" ]; then
+            git fetch --prune
             if git status --porcelain | grep -q "^\?\?"; then
               git status --porcelain | grep "^\?\?" | sed 's/^?? //g' | xargs git rm -r
             fi
           else
-            echo "No untracked files to check."
+            echo "No pr-preview directory found. Skipping untracked files check."
           fi
 
       - name: Pull changes from remote gh-pages branch

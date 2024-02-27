@@ -1,5 +1,4 @@
 import 'package:financrr_frontend/main.dart';
-import 'package:financrr_frontend/pages/auth/server_info_page.dart';
 import 'package:financrr_frontend/themes.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:restrr/restrr.dart';
 
 import '../../../layout/adaptive_scaffold.dart';
 import '../../../router.dart';
-import '../settings_page.dart';
 
 class ThemeSettingsPage extends StatefulWidget {
   static const PagePathBuilder pagePath = PagePathBuilder('/@me/settings/theme');

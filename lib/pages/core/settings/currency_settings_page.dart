@@ -46,7 +46,7 @@ class _CurrencySettingsPageState extends State<CurrencySettingsPage> {
             child: SingleChildScrollView(
               child: StreamWrapper(
                 stream: _currenciesController.stream,
-                onError: (context, snap) => Text('Error'),
+                onError: (context, snap) => const Text('Error'),
                 onLoading: (context, snap) => const CircularProgressIndicator(),
                 onSuccess: (context, snap) => Column(
                   children: snap.data!

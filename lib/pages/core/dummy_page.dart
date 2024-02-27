@@ -14,7 +14,7 @@ class _DummyPageState extends State<DummyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Card(child: ListTile(title: Text(widget.text), subtitle: Text('This a a dummy page'))),
+        child: Card(child: ListTile(title: Text(widget.text), subtitle: const Text('This a a dummy page'))),
       ),
     );
   }

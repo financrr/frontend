@@ -60,6 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
       child: ListTile(
         onTap: () async {
           await _api.logout();
+          if (!mounted) return;
           context.authNotifier.setApi(null);
           context.goPath(ServerInfoPage.pagePath.build());
         },

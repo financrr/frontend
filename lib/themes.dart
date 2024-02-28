@@ -48,7 +48,7 @@ class AppThemes {
     return AppTheme(
         id: 3,
         logoPath: 'assets/logo/logo_light.svg',
-        nameFunction: (_) => 'AMOLED Dark',
+        name: 'theme_midnight'.tr(),
         previewColor: const Color(0xFF000000),
         themeMode: ThemeMode.dark,
         themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF000000)));

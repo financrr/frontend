@@ -2,7 +2,6 @@ import 'package:financrr_frontend/main.dart';
 import 'package:financrr_frontend/themes.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:restrr/restrr.dart';
 
 import '../../../layout/adaptive_scaffold.dart';
 import '../../../router.dart';
@@ -17,7 +16,6 @@ class ThemeSettingsPage extends StatefulWidget {
 }
 
 class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
-  late final Restrr _api = context.api!;
   late AppTheme _selectedTheme = context.appTheme;
   late bool _useSystemTheme = FinancrrApp.of(context).themeMode == ThemeMode.system;
 
@@ -93,7 +91,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Text(theme.nameFunction(context.locale), textAlign: TextAlign.center),
+              child: Text(theme.name, textAlign: TextAlign.center),
             )
           ],
         ),

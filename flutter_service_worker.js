@@ -19,8 +19,8 @@ const RESOURCES = {"icons/Icon-maskable-192.png": "1adb5f7d2bc2aabcc7b6905ce655f
 "canvaskit/chromium/canvaskit.js.symbols": "4525682ef039faeb11f24f37436dca06",
 "canvaskit/chromium/canvaskit.js": "43787ac5098c648979c27c13c6f804c3",
 "canvaskit/canvaskit.js": "c86fbd9e7b17accae76e5ad116583dc4",
-"index.html": "dfe5cf92f89360a7768bd92275d6a872",
-"/": "dfe5cf92f89360a7768bd92275d6a872",
+"index.html": "594a1fb85ab860d9518f470d6bea70a8",
+"/": "594a1fb85ab860d9518f470d6bea70a8",
 "flutter.js": "c71a09214cb6f5f8996a531350400a9a",
 "favicon.png": "5acdb6cb3f089e099bf9739addce99a7",
 "main.dart.js": "6963b870fe5146996420059c4b514062",
@@ -52,8 +52,8 @@ const RESOURCES = {"icons/Icon-maskable-192.png": "1adb5f7d2bc2aabcc7b6905ce655f
 "assets/assets/fonts/Montserrat-ExtraBold.ttf": "bd8fb30c6473177cfb9a5544c9ad8fdb",
 "assets/assets/logo/logo_blue.svg": "a20b2eb9c4f492b6fa27b228150dd919",
 "assets/assets/logo/logo_light.svg": "597fa03ba809834c77cfb04a3ce332b0",
-"assets/assets/l10n/de-DE.json": "1770eed23265e9b1b1a5500d6c54262c",
-"assets/assets/l10n/en-US.json": "9ed3f181640ed5df2184390ba9e21567"};
+"assets/assets/l10n/de-DE.json": "c282a7161c1da183de9efb9121f8253a",
+"assets/assets/l10n/en-US.json": "dc87d0ee8f289b13bea22b80657f3494"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",

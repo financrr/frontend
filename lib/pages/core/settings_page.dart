@@ -56,6 +56,13 @@ class _SettingsPageState extends State<SettingsPage> {
         subtitle: Text('Change the language of the app'),
       ),
     ),
+    const Card.outlined(
+      child: ListTile(
+        leading: Icon(Icons.format_align_left),
+        title: Text('Logs'),
+        subtitle: Text('Check the app\'s logs'),
+      ),
+    ),
     Card.outlined(
       child: ListTile(
         onTap: () async {

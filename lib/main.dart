@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:financrr_frontend/data/host_repository.dart';
 import 'package:financrr_frontend/data/repositories.dart';
+import 'package:financrr_frontend/pages/core/dashboard_page.dart';
 import 'package:financrr_frontend/router.dart';
 import 'package:financrr_frontend/themes.dart';
 import 'package:financrr_frontend/util/input_utils.dart';
@@ -69,6 +70,7 @@ class FinancrrAppState extends State<FinancrrApp> {
           .then((response) {
         if (response.hasData) {
           context.authNotifier.setApi(response.data);
+          context.pushPath(DashboardPage.pagePath.build());
         }
       });
     }

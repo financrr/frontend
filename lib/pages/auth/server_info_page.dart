@@ -86,7 +86,7 @@ class ServerInfoPageState extends State<ServerInfoPage> {
                 : TextButton.icon(
                     onPressed: () {
                       if (_isValid) {
-                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => LoginPage(hostUri: _hostUri!)));
+                        Navigator.push(context, LoginPage.pageRoute(hostUri: _hostUri!));
                       } else {
                         _handleUrlCheck();
                       }

@@ -62,18 +62,6 @@ class FinancrrAppState extends State<FinancrrApp> {
     _activeLightTheme = widget.themePreferences.currentLightTheme;
     _activeDarkTheme = widget.themePreferences.currentDarkTheme;
     _themeMode = widget.themePreferences.themeMode;
-    // try to fetch user (user may still be logged in)
-    final String hostUrl = HostService.get().hostUrl;
-    if (hostUrl.isNotEmpty && InputValidators.url(context, hostUrl) == null) {
-      (RestrrBuilder.savedSession(uri: Uri.parse(hostUrl))..options = const RestrrOptions(isWeb: kIsWeb))
-          .create()
-          .then((response) {
-        if (response.hasData) {
-          context.authNotifier.setApi(response.data);
-          context.pushPath(DashboardPage.pagePath.build());
-        }
-      });
-    }
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

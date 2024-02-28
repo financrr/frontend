@@ -16,6 +16,10 @@ class LoginPage extends StatefulWidget {
 
   const LoginPage({super.key, required this.hostUri});
 
+  static PageRoute<T> pageRoute<T>({required Uri hostUri}) {
+    return MaterialPageRoute(builder: (_) => LoginPage(hostUri: hostUri));
+  }
+
   @override
   State<StatefulWidget> createState() => LoginPageState();
 }

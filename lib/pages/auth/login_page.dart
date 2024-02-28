@@ -60,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _passwordController,
                       decoration: InputDecoration(
-                          labelText: 'common.cancel'.tr(),
+                          labelText: 'common.password'.tr(),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: IconButton(

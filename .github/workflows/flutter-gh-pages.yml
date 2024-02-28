@@ -16,16 +16,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: 'Set Flutter 3.19.0'
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
-        with: 
-          flutter-version: 3.19.0
-      - run: flutter clean
-      - run: flutter pub upgrade
-      - run: flutter build web --release --base-href /frontend/
-      # Push Changes
-      - run: git config user.name github-actions
-      - run: git config user.email github-actions@github.com
-      - run: git --work-tree build/web add --all
-      - run: git commit -m "Automatic deployment by github-actions"
-      - run: git push origin HEAD:gh-pages --force
+        with:
+          flutter-version: '3.19.0'
+
+      - name: Flutter Clean and Upgrade Packages
+        run: |
+          flutter clean
+          flutter pub upgrade
+
+      - name: Build Web
+        run: flutter build web --release --base-href /frontend/
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: build/web

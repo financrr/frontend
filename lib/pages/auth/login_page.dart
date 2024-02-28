@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:financrr_frontend/layout/templates/auth_page_template.dart';
 import 'package:financrr_frontend/pages/core/dashboard_page.dart';
 import 'package:financrr_frontend/util/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restrr/restrr.dart';
 
 import '../../layout/adaptive_scaffold.dart';
@@ -21,8 +21,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  late final AppLocalizations _locale = context.locale;
-
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -54,15 +52,15 @@ class LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: TextFormField(
                         controller: _usernameController,
-                        decoration: const InputDecoration(labelText: 'Username'),
+                        decoration: InputDecoration(labelText: 'common_username'.tr()),
                         autofillHints: const [AutofillHints.username],
-                        validator: (value) => value!.isEmpty ? 'Username may not be empty' : null,
+                        validator: (value) => value!.isEmpty ? 'common_username_not_empty' : null,
                       ),
                     ),
                     TextFormField(
                       controller: _passwordController,
                       decoration: InputDecoration(
-                          labelText: _locale.genericPassword,
+                          labelText: 'common_password'.tr(),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: IconButton(
@@ -71,7 +69,7 @@ class LoginPageState extends State<LoginPage> {
                           )),
                       obscureText: _obscureText,
                       autofillHints: const [AutofillHints.password, AutofillHints.newPassword],
-                      validator: (value) => value!.isEmpty ? 'Password may not be empty' : null,
+                      validator: (value) => value!.isEmpty ? 'common_password_not_empty' : null,
                     ),
                   ],
                 )),
@@ -82,7 +80,7 @@ class LoginPageState extends State<LoginPage> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: _handleLogin,
-                    child: Text(_locale.signInButton),
+                    child: const Text('common.sign_in').tr(),
                   ),
                 )),
           ],
@@ -91,11 +89,16 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _handleLogin() async {
     final String username = _usernameController.text;
-    final String password = _passwordController.text;
-    if (username.isEmpty || password.isEmpty) {
-      context.showSnackBar('Username and password may not be empty');
+    if (username.isEmpty) {
+      context.showSnackBar('common_username_not_empty');
       return;
     }
+    final String password = _passwordController.text;
+    if (username.isEmpty) {
+      context.showSnackBar('common_password_not_empty');
+      return;
+    }
+
     final RestResponse<Restrr> response =
         await (RestrrBuilder.login(uri: widget.hostUri, username: username, password: password)
               ..options = const RestrrOptions(isWeb: kIsWeb))

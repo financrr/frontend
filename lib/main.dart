@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:financrr_frontend/data/host_repository.dart';
 import 'package:financrr_frontend/data/repositories.dart';
 import 'package:financrr_frontend/router.dart';
@@ -9,7 +10,6 @@ import 'package:financrr_frontend/util/input_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:restrr/restrr.dart';
@@ -78,11 +78,12 @@ class FinancrrAppState extends State<FinancrrApp> {
     return ChangeNotifierProvider(
       create: (_) => AuthenticationNotifier(),
       child: MaterialApp.router(
-          onGenerateTitle: (ctx) => ctx.locale.brandName,
+          onGenerateTitle: (ctx) => 'brand_name'.tr(),
           routerConfig: AppRouter.goRouter,
           debugShowCheckedModeBanner: false,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           theme: _activeLightTheme.themeData,
           darkTheme: _activeDarkTheme.themeData,
           themeMode: _themeMode),

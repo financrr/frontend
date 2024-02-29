@@ -49,6 +49,7 @@ dependencies:
   easy_localization: ^3.0.4
 
   flutter_gen: any
+  logging: ^1.2.0
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
   flutter_test:

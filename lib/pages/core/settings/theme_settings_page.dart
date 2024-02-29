@@ -58,7 +58,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                     children: [
                       _buildThemePreview(AppThemes.light()),
                       _buildThemePreview(AppThemes.dark()),
-                      _buildThemePreview(AppThemes.amoledDark()),
+                      _buildThemePreview(AppThemes.midnight()),
                     ],
                   ),
                 )

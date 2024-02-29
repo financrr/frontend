@@ -20,7 +20,7 @@ class AppTheme {
 
 class AppThemes {
   static const String _fontFamily = 'Montserrat';
-  static final List<AppTheme> themes = [light(), dark(), amoledDark()];
+  static final List<AppTheme> themes = [light(), dark(), midnight()];
 
   const AppThemes._();
 
@@ -35,23 +35,25 @@ class AppThemes {
   }
 
   static AppTheme dark() {
+    const Color backgroundColor = Color(0xFF111111);
     return AppTheme(
         id: 2,
         logoPath: 'assets/logo/logo_light.svg',
         name: 'theme_dark'.tr(),
-        previewColor: const Color(0xFF2B2D31),
+        previewColor: backgroundColor,
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF101010)));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), backgroundColor));
   }
 
-  static AppTheme amoledDark() {
+  static AppTheme midnight() {
+    const Color backgroundColor = Color(0xFF000000);
     return AppTheme(
         id: 3,
         logoPath: 'assets/logo/logo_light.svg',
         name: 'theme_midnight'.tr(),
-        previewColor: const Color(0xFF000000),
+        previewColor: backgroundColor,
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), const Color(0xFF000000)));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), backgroundColor));
   }
 
   static ThemeData _buildThemeData(Brightness brightness, Color primaryColor, Color backgroundColor) {
@@ -128,7 +130,7 @@ class AppThemes {
           fontSize: 18,
           color: brightness == Brightness.dark ? Colors.white : Colors.black,
         ),
-        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.25) : backgroundColor,
+        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : backgroundColor,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
@@ -163,7 +165,7 @@ class AppThemes {
         iconTheme: MaterialStatePropertyAll(
           IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
         ),
-        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.25) : backgroundColor,
+        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : backgroundColor,
         surfaceTintColor: Colors.transparent,
         labelTextStyle: MaterialStatePropertyAll(
           TextStyle(

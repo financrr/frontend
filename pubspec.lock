@@ -366,7 +366,7 @@ packages:
     source: hosted
     version: "3.0.0"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
@@ -497,10 +497,10 @@ packages:
     dependency: "direct main"
     description:
       name: provider
-      sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
+      sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.1"
+    version: "6.1.2"
   pub_semver:
     dependency: transitive
     description:
@@ -514,10 +514,10 @@ packages:
     description:
       path: "."
       ref: development
-      resolved-ref: "090d671b3084c5564a717b104624941bc57ce25a"
+      resolved-ref: aed99f5879bbd6bec388a7b0906880558d07d845
       url: "https://github.com/financrr/restrr.git"
     source: git
-    version: "0.5.0"
+    version: "0.6.2"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -102,6 +102,7 @@ class LoginPageState extends State<LoginPage> {
     final RestResponse<Restrr> response =
         await (RestrrBuilder.login(uri: widget.hostUri, username: username, password: password)
               ..options = const RestrrOptions(isWeb: kIsWeb))
+            .on<ReadyEvent>(ReadyEvent, (event) => event.api.retrieveAllCurrencies())
             .create();
     if (!mounted) return;
     if (response.hasData) {

@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:restrr/restrr.dart';
@@ -19,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'data/theme_repository.dart';
 
 void main() async {
+  usePathUrlStrategy();
   SharedPreferences.setPrefix('financrr.');
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();

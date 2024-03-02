@@ -1,3 +1,4 @@
+import 'package:financrr_frontend/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,15 +7,14 @@ class ScaffoldNavBarShell extends StatefulWidget {
 
   const ScaffoldNavBarShell({super.key, required this.navigationShell});
 
-  static ScaffoldNavBarShellState? maybeOf(BuildContext context) =>
-      context.findAncestorStateOfType<ScaffoldNavBarShellState>();
+  static ScaffoldNavBarShellState? maybeOf(BuildContext context) => context.findAncestorStateOfType<ScaffoldNavBarShellState>();
 
   @override
   State<StatefulWidget> createState() => ScaffoldNavBarShellState();
 }
 
 class ScaffoldNavBarShellState extends State<ScaffoldNavBarShell> {
-  static const List<NavigationDestination> _destinations = [
+  static const List<NavigationDestination> _navBarDestinations = [
     NavigationDestination(
       icon: Icon(Icons.dashboard_outlined),
       selectedIcon: Icon(Icons.dashboard),
@@ -37,18 +37,56 @@ class ScaffoldNavBarShellState extends State<ScaffoldNavBarShell> {
     ),
   ];
 
+  static const List<NavigationRailDestination> _navRailDestinations = [
+    NavigationRailDestination(
+      icon: Icon(Icons.dashboard_outlined),
+      selectedIcon: Icon(Icons.dashboard),
+      label: Text('Dashboard'),
+    ),
+    NavigationRailDestination(
+      icon: Icon(Icons.account_balance_wallet_outlined),
+      selectedIcon: Icon(Icons.account_balance_wallet),
+      label: Text('Transactions'),
+    ),
+    NavigationRailDestination(
+      icon: Icon(Icons.leaderboard_outlined),
+      selectedIcon: Icon(Icons.leaderboard),
+      label: Text('Statistics'),
+    ),
+    NavigationRailDestination(
+      icon: Icon(Icons.settings_outlined),
+      selectedIcon: Icon(Icons.settings),
+      label: Text('Settings'),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final isMobile = context.isMobile;
+    print(MediaQuery.of(context).size.width);
     return Scaffold(
       body: SafeArea(
         top: false,
-        child: widget.navigationShell,
+        child:isMobile
+            ? widget.navigationShell
+            : Row(
+                children: [
+                  NavigationRail(
+                      destinations: _navRailDestinations,
+                      extended: context.isWidescreen,
+                      onDestinationSelected: (index) => goToBranch(index),
+                      selectedIndex: widget.navigationShell.currentIndex),
+                  Expanded(child: widget.navigationShell)
+                ],
+              ),
       ),
       appBar: AppBar(),
-      bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (index) => goToBranch(index),
-          selectedIndex: widget.navigationShell.currentIndex,
-          destinations: _destinations),
+      bottomNavigationBar: isMobile
+          ? NavigationBar(
+              onDestinationSelected: (index) => goToBranch(index),
+              selectedIndex: widget.navigationShell.currentIndex,
+              destinations: _navBarDestinations)
+          : null,
     );
   }
 

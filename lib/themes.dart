@@ -165,7 +165,7 @@ class AppThemes {
         iconTheme: MaterialStatePropertyAll(
           IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
         ),
-        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : backgroundColor,
+        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : null,
         surfaceTintColor: Colors.transparent,
         labelTextStyle: MaterialStatePropertyAll(
           TextStyle(
@@ -173,6 +173,23 @@ class AppThemes {
             fontWeight: FontWeight.w500,
             color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
           ),
+        ),
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        indicatorColor: primaryColor.withOpacity(brightness == Brightness.dark ? 0.4 : 0.15),
+        selectedIconTheme: IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
+        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : null,
+        selectedLabelTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
+        ),
+        unselectedLabelTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey[brightness == Brightness.dark ? 200 : 700],
         ),
       ),
       dialogTheme: const DialogTheme(

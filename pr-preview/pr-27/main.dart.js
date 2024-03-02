@@ -96901,7 +96901,8 @@ abk(a){var s,r
 $.ab.toString
 s=A.ds($.aZ().gBb(),0,null)
 r=(s.gZc()?A.z6(null,"/",s.gxh()):s).j(0)
-return r}}
+if(r==="/")return a
+else return r}}
 A.ai_.prototype={
 $2(a,b){return new A.oj(this.a,b,null)},
 $S:605}
@@ -109979,7 +109980,7 @@ q=t.z
 p=t.yo
 p=A.a([A.as5($.aV7(),A.a([A.mk(o,o,A.zO(B.OA,q),"/@me/dashboard",A.Lr())],p)),A.as5(o,A.a([A.mk(o,o,A.zO(B.Pa,q),"/@me/accounts",A.Lr())],p)),A.as5(o,A.a([A.mk(o,o,A.zO(B.Pb,q),"/@me/statistics",A.Lr())],p)),A.as5(o,A.a([A.mk(o,o,A.zO(B.a7r,q),"/@me/settings",A.Lr())],p))],A.a8("q<hl>"))
 m.push(new A.tt(o,new A.aaJ(),o,A.bbf(),p,A.ahU(o,A.a8("xf")),A.b3x(p),o))
-return A.b0f(!1,o,o,o,o,o,n,o,o,!1,o,!0,o,!1,new A.a06(new A.apH(m,A.bbh(),5)))})
+return A.b0f(!1,o,o,o,o,"/",n,o,o,!1,o,!0,o,!1,new A.a06(new A.apH(m,A.bbh(),5)))})
 s($,"bbX","aV8",()=>A.a([A.aaL(),A.aaK(),A.aMt()],A.a8("q<nX>")))
 s($,"bcK","aVp",()=>A.ahU(null,A.a8("vV")))
 s($,"bfr","aWV",()=>A.aJK(1,1,500))

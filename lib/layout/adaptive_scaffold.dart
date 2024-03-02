@@ -48,14 +48,13 @@ class AdaptiveScaffoldState extends State<AdaptiveScaffold> {
 
   Widget _buildLayout(BuildContext context, BoxConstraints constraints) {
     Widget Function(BuildContext, BoxConstraints, Size) layout = widget.verticalBuilder;
-    if (!context.isMobile) {
+    if (!context.isMobile && false) {
       layout = widget.horizontalFullBuilder ??
           (context, constraints, size) {
             return Center(
                 child: AspectRatio(
                     aspectRatio: 9 / 12,
-                    child:
-                        widget.verticalBuilder.call(context, constraints, Size(size.height / (12 / 9), size.height))));
+                    child: widget.verticalBuilder.call(context, constraints, Size(size.height / (12 / 9), size.height))));
           };
     }
     return layout.call(context, constraints, MediaQuery.of(context).size);

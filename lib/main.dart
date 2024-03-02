@@ -33,13 +33,11 @@ void main() async {
       print('${record.level.name}: ${record.time}: ${record.message}');
     }
   });
-  runApp(
-    EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
-        path: 'assets/l10n',
-        fallbackLocale: const Locale('en', 'US'),
-        child: FinancrrApp(themePreferences: themePreferences))
-  );
+  runApp(EasyLocalization(
+      supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
+      path: 'assets/l10n',
+      fallbackLocale: const Locale('en', 'US'),
+      child: FinancrrApp(themePreferences: themePreferences)));
 }
 
 class FinancrrApp extends StatefulWidget {
@@ -136,7 +134,6 @@ class FinancrrAppState extends State<FinancrrApp> {
 class CustomHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

@@ -31,7 +31,8 @@ class AppThemes {
         name: 'theme_light'.tr(),
         previewColor: Colors.white,
         themeMode: ThemeMode.light,
-        themeData: _buildThemeData(Brightness.light, const Color(0xFF2C03E6), const Color(0xFFFFFFFF)));
+        themeData:
+            _buildThemeData(Brightness.light, const Color(0xFF2C03E6), const Color(0xFFFFFFFF), const Color(0xFFF6F6F6)));
   }
 
   static AppTheme dark() {
@@ -42,7 +43,7 @@ class AppThemes {
         name: 'theme_dark'.tr(),
         previewColor: backgroundColor,
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), backgroundColor));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), backgroundColor, const Color(0xFF1A1A1A)));
   }
 
   static AppTheme midnight() {
@@ -53,10 +54,15 @@ class AppThemes {
         name: 'theme_midnight'.tr(),
         previewColor: backgroundColor,
         themeMode: ThemeMode.dark,
-        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), backgroundColor));
+        themeData: _buildThemeData(Brightness.dark, const Color(0xFF4B87FF), backgroundColor, const Color(0xFF111111)));
   }
 
-  static ThemeData _buildThemeData(Brightness brightness, Color primaryColor, Color backgroundColor) {
+  static ThemeData _buildThemeData(
+    Brightness brightness,
+    Color primaryColor,
+    Color backgroundColor,
+    Color navigationBackgroundColor,
+  ) {
     final ThemeData base = ThemeData(
       chipTheme: const ChipThemeData(
         side: BorderSide.none,
@@ -114,14 +120,7 @@ class AppThemes {
       scaffoldBackgroundColor: backgroundColor,
       hintColor: Colors.grey[600],
       fontFamily: _fontFamily,
-      snackBarTheme: SnackBarThemeData(
-        contentTextStyle: const TextStyle(
-          fontFamily: _fontFamily,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-        backgroundColor: Colors.grey[900],
-      ),
+      /* Navigation Themes */
       appBarTheme: AppBarTheme(
         foregroundColor: brightness == Brightness.dark ? Colors.white : Colors.black,
         titleTextStyle: TextStyle(
@@ -130,10 +129,51 @@ class AppThemes {
           fontSize: 18,
           color: brightness == Brightness.dark ? Colors.white : Colors.black,
         ),
-        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : backgroundColor,
+        backgroundColor: navigationBackgroundColor,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        indicatorColor: primaryColor.withOpacity(brightness == Brightness.dark ? 0.4 : 0.15),
+        iconTheme: MaterialStatePropertyAll(
+          IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
+        ),
+        backgroundColor: navigationBackgroundColor,
+        surfaceTintColor: Colors.transparent,
+        labelTextStyle: MaterialStatePropertyAll(
+          TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
+          ),
+        ),
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        indicatorColor: primaryColor.withOpacity(brightness == Brightness.dark ? 0.4 : 0.15),
+        selectedIconTheme: IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
+        backgroundColor: navigationBackgroundColor,
+        selectedLabelTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
+        ),
+        unselectedLabelTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey[brightness == Brightness.dark ? 200 : 700],
+        ),
+      ),
+      /* Other Themes */
+      snackBarTheme: SnackBarThemeData(
+        contentTextStyle: const TextStyle(
+          fontFamily: _fontFamily,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: Colors.grey[900],
       ),
       drawerTheme: DrawerThemeData(
         backgroundColor: backgroundColor,
@@ -159,38 +199,6 @@ class AppThemes {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         surfaceTintColor: Colors.transparent,
-      ),
-      navigationBarTheme: NavigationBarThemeData(
-        indicatorColor: primaryColor.withOpacity(brightness == Brightness.dark ? 0.4 : 0.15),
-        iconTheme: MaterialStatePropertyAll(
-          IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
-        ),
-        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : null,
-        surfaceTintColor: Colors.transparent,
-        labelTextStyle: MaterialStatePropertyAll(
-          TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
-          ),
-        ),
-      ),
-      navigationRailTheme: NavigationRailThemeData(
-        indicatorColor: primaryColor.withOpacity(brightness == Brightness.dark ? 0.4 : 0.15),
-        selectedIconTheme: IconThemeData(color: Colors.grey[brightness == Brightness.dark ? 500 : 700]),
-        backgroundColor: brightness == Brightness.dark ? Colors.black.withOpacity(.1) : null,
-        selectedLabelTextStyle: TextStyle(
-          fontFamily: _fontFamily,
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: Colors.grey[brightness == Brightness.dark ? 300 : 800],
-        ),
-        unselectedLabelTextStyle: TextStyle(
-          fontFamily: _fontFamily,
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: Colors.grey[brightness == Brightness.dark ? 200 : 700],
-        ),
       ),
       dialogTheme: const DialogTheme(
         surfaceTintColor: Colors.transparent,

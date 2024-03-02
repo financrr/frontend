@@ -60,23 +60,35 @@ class ScaffoldNavBarShellState extends State<ScaffoldNavBarShell> {
     ),
   ];
 
+  bool _isHovered = false;
+
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
-    print(MediaQuery.of(context).size.width);
     return Scaffold(
       body: SafeArea(
         top: false,
-        child:isMobile
+        child: isMobile
             ? widget.navigationShell
             : Row(
                 children: [
-                  NavigationRail(
-                      destinations: _navRailDestinations,
-                      extended: context.isWidescreen,
-                      onDestinationSelected: (index) => goToBranch(index),
-                      selectedIndex: widget.navigationShell.currentIndex),
-                  Expanded(child: widget.navigationShell)
+                  StatefulBuilder(builder: (context, setState) {
+                    return MouseRegion(
+                      onEnter: (event) => setState(() => _isHovered = true),
+                      onExit: (event) => setState(() => _isHovered = false),
+                      child: NavigationRail(
+                          destinations: _navRailDestinations,
+                          extended: context.isWidescreen || _isHovered,
+                          onDestinationSelected: (index) => goToBranch(index),
+                          selectedIndex: widget.navigationShell.currentIndex),
+                    );
+                  }),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: widget.navigationShell,
+                    ),
+                  )
                 ],
               ),
       ),

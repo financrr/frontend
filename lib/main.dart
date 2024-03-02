@@ -16,6 +16,7 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:restrr/restrr.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'data/theme_repository.dart';
 

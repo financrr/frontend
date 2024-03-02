@@ -19,6 +19,7 @@ class AppRouter {
   static final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey(debugLabel: 'shell');
 
   static final goRouter = GoRouter(
+    initialLocation: '/',
     navigatorKey: rootNavigatorKey,
     routes: [
       ..._noShellRoutes(),

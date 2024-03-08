@@ -55,10 +55,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                   padding: const EdgeInsets.only(top: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      for (AppTheme theme in AppTheme.themes)
-                        _buildThemePreview(theme)
-                    ],
+                    children: [for (AppTheme theme in AppTheme.themes) _buildThemePreview(theme)],
                   ),
                 )
               ],

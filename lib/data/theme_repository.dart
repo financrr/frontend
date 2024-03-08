@@ -8,7 +8,8 @@ class ThemePreferences {
   final String currentLightThemeId;
   final String currentDarkThemeId;
 
-  const ThemePreferences({this.themeMode = ThemeMode.system, this.currentLightThemeId = "LIGHT", this.currentDarkThemeId = "DARK"});
+  const ThemePreferences(
+      {this.themeMode = ThemeMode.system, this.currentLightThemeId = "LIGHT", this.currentDarkThemeId = "DARK"});
 
   ThemePreferences copyWith({
     ThemeMode? themeMode,
@@ -55,7 +56,8 @@ class EffectiveThemePreferences {
   final AppTheme currentLightTheme;
   final AppTheme currentDarkTheme;
 
-  const EffectiveThemePreferences({required this.themeMode, required this.currentLightTheme, required this.currentDarkTheme});
+  const EffectiveThemePreferences(
+      {required this.themeMode, required this.currentLightTheme, required this.currentDarkTheme});
 }
 
 class ThemeService {
@@ -71,7 +73,8 @@ class ThemeService {
         currentDarkTheme: AppTheme.themes.where((t) => t.id == preferences.currentDarkThemeId).first);
   }
 
-  static Future<ThemePreferences> setThemePreferences(AppTheme lightTheme, AppTheme darkTheme, ThemeMode themeMode) async {
+  static Future<ThemePreferences> setThemePreferences(
+      AppTheme lightTheme, AppTheme darkTheme, ThemeMode themeMode) async {
     final ThemePreferences preferences =
         ThemePreferences(themeMode: themeMode, currentLightThemeId: lightTheme.id, currentDarkThemeId: darkTheme.id);
     await Repositories.themeRepository.save(preferences);

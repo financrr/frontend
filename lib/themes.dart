@@ -92,8 +92,10 @@ class AppTheme {
         _tryNavigationRailThemeDataFromJson(fullJson, json['navigation_rail_theme_data']);
     final ElevatedButtonThemeData? elevatedButtonTheme =
         _tryElevatedButtonThemeDataFromJson(fullJson, json['elevated_button_theme_data']);
-    final TextButtonThemeData? textButtonTheme = _tryTextButtonThemeDataFromJson(fullJson, json['text_button_theme_data']);
-    final TextSelectionThemeData? textSelectionTheme = _tryTextSelectionThemeDataFromJson(fullJson, json['text_selection_theme_data']);
+    final TextButtonThemeData? textButtonTheme =
+        _tryTextButtonThemeDataFromJson(fullJson, json['text_button_theme_data']);
+    final TextSelectionThemeData? textSelectionTheme =
+        _tryTextSelectionThemeDataFromJson(fullJson, json['text_selection_theme_data']);
     final SwitchThemeData? switchTheme = _trySwitchThemeDataFromJson(fullJson, json['switch_theme_data']);
     final SnackBarThemeData? snackBarTheme = _trySnackBarThemeDataFromJson(fullJson, json['snack_bar_theme_data']);
     final DrawerThemeData? drawerTheme = _tryDrawerThemeData(fullJson, json['drawer_theme_data']);
@@ -303,7 +305,8 @@ class AppTheme {
     );
   }
 
-  static TextSelectionThemeData? _tryTextSelectionThemeDataFromJson(Map<String, dynamic> fullJson, Map<String, dynamic>? json) {
+  static TextSelectionThemeData? _tryTextSelectionThemeDataFromJson(
+      Map<String, dynamic> fullJson, Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
@@ -381,7 +384,8 @@ class AppThemeColor {
     if (options == null) {
       return null;
     }
-    if ((options.hex == null && options.copyFromPath == null) || (options.hex != null && options.copyFromPath != null)) {
+    if ((options.hex == null && options.copyFromPath == null) ||
+        (options.hex != null && options.copyFromPath != null)) {
       throw StateError('Either hex or copy_from_path must be set!');
     }
     return AppThemeColor(options: options);
@@ -446,7 +450,8 @@ class AppThemeColorOptions {
         JsonUtils.isInvalidType(json, 'opacity', double, nullable: true)) {
       return null;
     }
-    if ((json['hex'] == null && json['copy_from_path'] == null) || (json['hex'] != null && json['copy_from_path'] != null)) {
+    if ((json['hex'] == null && json['copy_from_path'] == null) ||
+        (json['hex'] != null && json['copy_from_path'] != null)) {
       return null;
     }
     return AppThemeColorOptions(hex: json['hex'], copyFromPath: json['copy_from_path'], opacity: json['opacity']);

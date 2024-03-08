@@ -55,8 +55,8 @@ const RESOURCES = {"assets/assets/themes/midnight.financrr-theme.json": "94d8ddb
 "favicon.png": "5acdb6cb3f089e099bf9739addce99a7",
 "flutter.js": "c71a09214cb6f5f8996a531350400a9a",
 "manifest.json": "c4cc8f93fa92c487d0f9342362bfe4dd",
-"index.html": "c39e9c2a636db407c1421a5abbf8cc58",
-"/": "c39e9c2a636db407c1421a5abbf8cc58",
+"index.html": "5ef7db1bdbe05da8416193b7cd79d80c",
+"/": "5ef7db1bdbe05da8416193b7cd79d80c",
 "main.dart.js": "9e90fb383d00bf6d091827fb3c37112a"};
 // The application shell files that are downloaded before a service worker can
 // start.

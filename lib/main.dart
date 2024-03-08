@@ -28,6 +28,7 @@ void main() async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   const FlutterSecureStorage storage = FlutterSecureStorage();
   await Repositories.init(storage, preferences);
+  await AppThemeLoader.init();
   final EffectiveThemePreferences themePreferences = await ThemeService.getOrInsertEffective();
   Logger.root.onRecord.listen((record) {
     if (kDebugMode) {
@@ -53,8 +54,8 @@ class FinancrrApp extends StatefulWidget {
 }
 
 class FinancrrAppState extends State<FinancrrApp> {
-  AppTheme _activeLightTheme = AppThemes.light();
-  AppTheme _activeDarkTheme = AppThemes.dark();
+  AppTheme _activeLightTheme = AppTheme.getById('LIGHT')!;
+  AppTheme _activeDarkTheme = AppTheme.getById('DARK')!;
   ThemeMode _themeMode = ThemeMode.system;
 
   ThemeMode get themeMode => _themeMode;

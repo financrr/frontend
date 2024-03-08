@@ -56,9 +56,8 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildThemePreview(AppThemes.light()),
-                      _buildThemePreview(AppThemes.dark()),
-                      _buildThemePreview(AppThemes.midnight()),
+                      for (AppTheme theme in AppTheme.themes)
+                        _buildThemePreview(theme)
                     ],
                   ),
                 )
@@ -91,7 +90,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Text(theme.name, textAlign: TextAlign.center),
+              child: Text(theme.effectiveName, textAlign: TextAlign.center),
             )
           ],
         ),

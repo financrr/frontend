@@ -9,7 +9,7 @@ extension LayoutExtension on BuildContext {
 }
 
 extension ThemeExtension on BuildContext {
-  AppTheme get appTheme => FinancrrApp.of(this).getAppTheme();
+  AppTheme get appTheme => FinancrrApp.of(this).getAppTheme()!;
 
   ThemeData get theme => appTheme.themeData;
 

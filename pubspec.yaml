@@ -76,6 +76,7 @@ flutter:
 
   assets:
     - assets/l10n/
+    - assets/themes/
     - assets/logo/logo_blue.svg
     - assets/logo/logo_light.svg
 

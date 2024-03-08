@@ -12,6 +12,7 @@ class Repositories {
 
   static Future init(FlutterSecureStorage storage, SharedPreferences preferences) async {
     themeRepository = ThemeRepository(preferences: preferences);
+    await themeRepository.clear();
     hostRepository = HostRepository(preferences: preferences);
   }
 }
@@ -100,6 +101,12 @@ abstract class Repository<T> {
       _ => throw StateError(
           'Encountered invalid Object when saving ${data.runtimeType}! Got: ${value.runtimeType}, Expected either String, int, bool or double')
     };
+  }
+
+  Future<void> clear() async {
+    for (String key in keys) {
+      await preferences.remove('${prefix}_$key');
+    }
   }
 }
 

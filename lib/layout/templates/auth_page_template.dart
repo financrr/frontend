@@ -50,7 +50,7 @@ class AuthPageTemplateState extends State<AuthPageTemplate> {
                   IconButton(
                       tooltip: 'Toggle theme',
                       onPressed: () => FinancrrApp.of(context)
-                          .changeAppTheme(theme: context.lightMode ? AppThemes.dark() : AppThemes.light()),
+                          .changeAppTheme(theme: context.lightMode ? AppTheme.getById('DARK')! : AppTheme.getById('LIGHT')!),
                       icon: Icon(context.lightMode ? Icons.nightlight_round : Icons.wb_sunny, color: Colors.grey[400])),
                 ],
               ),

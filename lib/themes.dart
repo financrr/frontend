@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:financrr_frontend/util/json_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -24,7 +25,7 @@ class AppThemeLoader {
 }
 
 class AppTheme {
-  static Map<String, AppTheme> _themes = {};
+  static final Map<String, AppTheme> _themes = {};
 
   static const String fontFamily = 'Montserrat';
   static const List<String> fontFamilyFallback = ['Arial', 'sans-serif'];
@@ -46,7 +47,7 @@ class AppTheme {
       required this.themeMode,
       required this.themeData});
 
-  String get effectiveName => translationKey ?? fallbackName ?? id;
+  String get effectiveName => translationKey?.tr() ?? fallbackName ?? id;
 
   static AppTheme? getById(String id) => _themes[id];
   static Iterable<AppTheme> get themes => _themes.values;
@@ -79,32 +80,33 @@ class AppTheme {
 
   static ThemeData _buildThemeDataFromJson(Map<String, dynamic> fullJson, Map<String, dynamic> json) {
     final Brightness? brightness = JsonUtils.tryEnum(json['brightness'], Brightness.values);
-    final AppThemeColor? primaryColor = AppThemeColor.tryFromJson(json['primary_color']);
+    final Color? primaryColor = AppThemeColor.tryFromJson(json['primary_color'])?.toColor(fullJson);
     final AppThemeColor? backgroundColor = AppThemeColor.tryFromJson(json['background_color']);
     final AppThemeColor? hintColor = AppThemeColor.tryFromJson(json['hint_color']);
     final AppThemeColor? cardColor = AppThemeColor.tryFromJson(json['card_color']);
-    final AppBarTheme? appBarTheme = _tryAppBarThemeFromJson(fullJson, json['app_bar_theme']);
+    final TextTheme textTheme = _buildTextTheme(primaryColor);
+    final AppBarTheme? appBarTheme = _tryAppBarThemeFromJson(fullJson, json['app_bar_theme_data']);
     final NavigationBarThemeData? navigationBarTheme =
-        _tryNavigationBarThemeDataFromJson(fullJson, json['navigation_bar_theme']);
+        _tryNavigationBarThemeDataFromJson(fullJson, json['navigation_bar_theme_data']);
     final NavigationRailThemeData? navigationRailTheme =
-        _tryNavigationRailThemeDataFromJson(fullJson, json['navigation_rail_theme']);
+        _tryNavigationRailThemeDataFromJson(fullJson, json['navigation_rail_theme_data']);
     final ElevatedButtonThemeData? elevatedButtonTheme =
-        _tryElevatedButtonThemeDataFromJson(fullJson, json['elevated_button_theme']);
-    final TextButtonThemeData? textButtonTheme = _tryTextButtonThemeDataFromJson(fullJson, json['text_button_theme']);
+        _tryElevatedButtonThemeDataFromJson(fullJson, json['elevated_button_theme_data']);
+    final TextButtonThemeData? textButtonTheme = _tryTextButtonThemeDataFromJson(fullJson, json['text_button_theme_data']);
     final TextSelectionThemeData? textSelectionTheme = _tryTextSelectionThemeDataFromJson(fullJson, json['text_selection_theme_data']);
-    final SwitchThemeData? switchTheme = _trySwitchThemeDataFromJson(fullJson, json['switch_theme']);
-    final SnackBarThemeData? snackBarTheme = _trySnackBarThemeDataFromJson(fullJson, json['snack_bar_theme']);
-    final DrawerThemeData? drawerTheme = _tryDrawerThemeData(fullJson, json['drawer_theme']);
+    final SwitchThemeData? switchTheme = _trySwitchThemeDataFromJson(fullJson, json['switch_theme_data']);
+    final SnackBarThemeData? snackBarTheme = _trySnackBarThemeDataFromJson(fullJson, json['snack_bar_theme_data']);
+    final DrawerThemeData? drawerTheme = _tryDrawerThemeData(fullJson, json['drawer_theme_data']);
     return ThemeData(
         useMaterial3: true,
         brightness: brightness,
-        primaryColor: primaryColor?.toColor(fullJson),
+        primaryColor: primaryColor,
         scaffoldBackgroundColor: backgroundColor?.toColor(fullJson),
         hintColor: hintColor?.toColor(fullJson),
         cardColor: cardColor?.toColor(fullJson),
         fontFamily: fontFamily,
         fontFamilyFallback: fontFamilyFallback,
-        textTheme: _buildTextTheme(primaryColor?.toColor(fullJson)),
+        textTheme: textTheme,
         popupMenuTheme: const PopupMenuThemeData(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -120,6 +122,14 @@ class AppTheme {
         sliderTheme: const SliderThemeData(
           thumbShape: RoundSliderThumbShape(enabledThumbRadius: 7),
           trackHeight: 2.0,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          floatingLabelStyle: textTheme.bodyMedium?.copyWith(color: primaryColor, fontWeight: FontWeight.w600),
+          focusedBorder: OutlineInputBorder(
+            borderSide: primaryColor == null ? BorderSide.none : BorderSide(color: primaryColor),
+          ),
+          border: const OutlineInputBorder(),
         ),
         // theme data
         appBarTheme: appBarTheme,
@@ -367,36 +377,42 @@ class AppThemeColor {
     if (json is String) {
       return AppThemeColor(value: json);
     }
-    if (JsonUtils.isInvalidType(json, 'options', Map)) {
+    final AppThemeColorOptions? options = AppThemeColorOptions.tryFromJson(json);
+    if (options == null) {
       return null;
     }
-    final AppThemeColorOptions? options = AppThemeColorOptions.tryFromJson(json['options']);
-    if ((json['value'] != null && options != null) || (json['value'] == null && options == null)) {
-      throw StateError('Either value or options must be set!');
+    if ((options.hex == null && options.copyFromPath == null) || (options.hex != null && options.copyFromPath != null)) {
+      throw StateError('Either hex or copy_from_path must be set!');
     }
-    return AppThemeColor(options: AppThemeColorOptions.tryFromJson(json['options']));
+    return AppThemeColor(options: options);
   }
 
   Color toColor(Map<String, dynamic> json) {
     if (value != null) {
-      return Color(int.parse(value!, radix: 16));
+      return _parseColor(value!);
     }
     if (options != null) {
       final AppThemeColorOptions colorOptions = options!;
       final double opacity = colorOptions.opacity ?? 1;
       if (colorOptions.hex != null) {
-        return Color(int.parse(colorOptions.hex!, radix: 16)).withOpacity(opacity);
+        return _parseColor(colorOptions.hex!).withOpacity(opacity);
       }
       if (colorOptions.copyFromPath != null) {
         final String path = colorOptions.copyFromPath!;
         Color? color;
         Map<String, dynamic> current = json;
-        for (String split in path.split('.')) {
+        for (String split in path.split('/')) {
           if (current[split] is Map) {
-            current = current[split] as Map<String, dynamic>;
+            final Map<String, dynamic> newMap = current[split];
+            final AppThemeColor? color = AppThemeColor.tryFromJson(current[split]);
+            if (color == null) {
+              current = newMap;
+            } else {
+              return color.toColor(json);
+            }
           }
           if (current[split] is String) {
-            color = Color(int.parse(current[split] as String, radix: 16));
+            color = _parseColor(current[split] as String);
           }
         }
         if (color == null) {
@@ -406,6 +422,14 @@ class AppThemeColor {
       }
     }
     throw StateError('Either value or options must be set!');
+  }
+
+  Color _parseColor(String rawHex) {
+    String hex = rawHex;
+    if (hex.length == 8) {
+      hex = 'FF${hex.substring(2)}';
+    }
+    return Color(int.parse(hex, radix: 16));
   }
 }
 
@@ -422,8 +446,8 @@ class AppThemeColorOptions {
         JsonUtils.isInvalidType(json, 'opacity', double, nullable: true)) {
       return null;
     }
-    if (json['hex'] == null && json['copy_from_path'] == null) {
-      throw StateError('Either hex or copy_from_path must be set!');
+    if ((json['hex'] == null && json['copy_from_path'] == null) || (json['hex'] != null && json['copy_from_path'] != null)) {
+      return null;
     }
     return AppThemeColorOptions(hex: json['hex'], copyFromPath: json['copy_from_path'], opacity: json['opacity']);
   }

@@ -16,6 +16,7 @@
             },
             "copy_from_path": {
               "type": "string",
+              "format": "json-pointer",
               "description": "The path to the color to copy"
             },
             "opacity": {
